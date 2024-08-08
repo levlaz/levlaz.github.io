@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<meta property="fediverse:creator" content="levlaz@hachyderm.io" />
+<title>R1D16 Object Oriented Programming in C# | Lev Lazinskiy</title>
+
+      <link rel="stylesheet" href="/css/main.min.680deb1d34beb9f1cf9ebcfb7a9906ac9873152454f99aabe500b9d4bcd58af0.css" integrity="sha256-aA3rHTS&#43;ufHPnrz7epkGrJhzFSRU&#43;Zqr5QC51LzVivA=" crossorigin="anonymous">
+
+
+      <script src="/js/main.23cd0c7d837263b9eaeb96ee2d9ccfa2969daa3fa00fa1c1fe8701a9b87251a1.js" integrity="sha256-I80MfYNyY7nq65buLZzPopadqj&#43;gD6HB/ocBqbhyUaE=" crossorigin="anonymous"></script>
+
+<script defer data-domain="levlaz.org" src="https://analytics.levlaz.org/js/script.js"></script>
+
+
+</head>
+<body>
+  <div id="rainbow"></div>
+  <header>
+    <h1><a class="logo" href="/">Lev Lazinskiy</a></h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a style="margin-left:10px;" href="/about/">About</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" aria-current="true" class="ancestor" href="/archive/">Archive</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/tags/">Tags</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/now/">Now</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/links/">Links</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/index.xml">Feed</a>
+    </li>
+    </ul>
+  </nav>
+
+
+
+  </header>
+  <main>
+    
+<script defer page-type="blogpost" data-domain="levlaz.org" src="https://plausible.io/js/script.pageview-props.js"></script>
+<h2 style="margin-bottom:0">R1D16 Object Oriented Programming in C#</h2>
+
+  <div style="color:grey">
+    
+    
+    <time datetime="2018-02-13T23:47:37&#43;00:00">February 13, 2018</time> |  
+      <a href="/tags/programming/">programming</a> |
+      <a href="/tags/dotnet/">dotnet</a> |
+
+  </div>
+
+  <p>After wrapping up the <a href="https://www.edx.org/course/introduction-c-microsoft-dev204-1x-0">Intro to C#</a> course I began the next course in the series which covers <a href="https://www.edx.org/course/object-oriented-programming-c-microsoft-dev204-2x" target="_blank" rel="noopener">Object Oriented Programming in C#.</a> C# is an object oriented language, similar to Java. This means that running all of your code out of a single &ldquo;main&rdquo; method is possible (and is exactly what we did in the last course) but goes against the spirit of the language itself.</p>
+<p>I also read a very timely blog post today about <a href="https://odetocode.com/blogs/scott/archive/2018/02/13/when-to-create-a-new-c-class-definition.aspx?utm_content=buffer5bc43&amp;utm_medium=social&amp;utm_source=twitter.com&amp;utm_campaign=buffer" target="_blank" rel="noopener">when to create a new class in C#</a> by K. Scott Allen. This is one of the most well written articles i&rsquo;ve read regarding this topic and comes with some really great advice and rules of thumb. My biggest takeaway was this:</p>
+<blockquote>If you write a sentence saying you can use the class to ___ and ___ in a system, then it might be time to look at making two classes instead of one.</blockquote>
+<h2>Cool Stuff</h2>
+<ul>
+ 	<li>C# support <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/partial-classes-and-methods" target="_blank" rel="noopener">partial classes</a> (as well as partial structs and interfaces). This means that you can define the class accross multiple different source files. I can't think of an immediate time where I wanted this feature in another langauge but its cool to know that it is there.</li>
+ 	<li>For simple class properties, C# comes with auto-implemented getters and setters so if you are not doing any sort of custom validation or logic, then you can simplify the code.</li>
+</ul>
+<pre>public class Person {
+<pre><code>private string name;
+
+// traditional getters and setters 
+public string Name
+{
+    get
+    {
+        return name;
+    }
+    set
+    {
+        name = value;
+    }
+}
+
+// auto-implemented getters and setters 
+public string Name { get; set; }
+</code></pre>
+<p>}</pre></p>
+<ul>
+ 	<li>If you are using Visual Studio it makes it dead simple to create the getters and setters automatically after your field has been defined. Some of the refactoring functionality of Visual Studio is really amazing.</li>
+</ul>
+The first module was a basic overview of OOP so nothing to exciting is happening yet. I did get a chance to review the <a href="https://docs.microsoft.com/en-us/dotnet/standard/collections/#choosing-a-collection">built in generic collections</a> that are available as a part of C# / .NET -- this is somethign that I wish I paid more attention to when I was learning pyton because I continue to find better built in data structures for various tasks on a daily basis.
+
+
+  <div class="more">
+    <p>
+        Thank you for reading! Share your thoughts with  me 
+        on <a href="https://hachyderm.io/@levlaz">mastodon</a> or via 
+        <a href="mailto:lev@levlaz.org">email</a>. 
+    </p>
+    <p>
+        Check out some more stuff to read down below.
+    </p>
+        
+        <p>
+            <b>Most popular posts this month</b>
+        </p>
+        <ul>
+            
+            <li>
+                <a href="/ive-visited-all-50-states/">I've Visited all 50 States </a>
+            </li>
+            
+            <li>
+                <a href="/no-politics-in-the-workplace/">No Politics in the Workplace </a>
+            </li>
+            
+            <li>
+                <a href="/tags/tralev/">tralev </a>
+            </li>
+            
+            <li>
+                <a href="/installing-nextcloud-on-a-freebsd-vps/">Installing Nextcloud on a FreeBSD VPS </a>
+            </li>
+            
+            <li>
+                <a href="/3-years/">3 Years </a>
+            </li>
+            
+        </ul>
+        
+        
+        <p><b>Recent Favorite Blog Posts</b></p>
+        <p> This is a collection of the last 8 posts that I bookmarked.</p>
+        <ul>
+            
+            <li>
+                <a href="https://bradfrost.com/blog/post/40-thoughts-at-40/">40 Thoughts At 40</a> from Blog – Brad Frost
+            </li>
+            
+            <li>
+                <a href="https://www.jwz.org/blog/2024/07/to-blog-or-to-social-post/">To Blog or to Social-Post</a> from jwz
+            </li>
+            
+            <li>
+                <a href="https://blog.pecar.me/sqlite-prod">Gotchas with SQLite in Production</a> from Anže’s Blog
+            </li>
+            
+            <li>
+                <a href="https://people.skolelinux.org/pere/blog/More_than_200_orphaned_Debian_packages_moved_to_git__216_to_go.html">Petter Reinholdtsen: More than 200 orphaned Debian packages moved to git, 216 to go</a> from Planet Debian
+            </li>
+            
+            <li>
+                <a href="https://eli.thegreenplace.net/2020/you-dont-need-virtualenv-in-go/">Eli Bendersky: You don't need virtualenv in Go</a> from Planet Python
+            </li>
+            
+            <li>
+                <a href="https://world.hey.com/jason/introducing-writebook-e217cae3">Introducing Writebook</a> from Jason Fried
+            </li>
+            
+            <li>
+                <a href="https://jvns.ca/blog/2024/07/03/reasons-to-use-job-control/">Reasons to use your shell's job control</a> from Julia Evans
+            </li>
+            
+            <li>
+                <a href="https://medium.com/@larrytabeh/gnome-what-id-like-to-know-as-a-newcomer-a0ff1a053be2?source=rss-b8d7c4c73a7b------2">Tamnjong Larry Tabeh: GNOME- What I’d like to know as a newcomer</a> from Planet GNOME
+            </li>
+            
+        </ul>
+        
+</div>
+
+  
+<section class="webring">
+  <h3>Articles from blogs I follow around the net</h3>
+  <section class="articles">
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://www.jwz.org/blog/2024/08/london-breed-is-tough-on-crime/" target="_blank" rel="noopener">London Breed is Tough on Crime</a>
+      </h4>
+      <p class="summary" dir="auto">&#34;Huge Success&#34;: A quarter million dollars in SFPD overtime in order to utterly fail to prevent skateboarding on one block for a single afternoon:
+
+The cost of San Francisco Police Department overtime during the 2024 Dolores Park hill bomb last month…</p>
+      <small class="source">
+        via <a href="https://www.jwz.org/blog/">jwz</a>
+      </small>
+      <small class="date">August 8, 2024</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://www.servethehome.com/we-bought-1347-used-data-center-ssds-to-look-at-ssd-endurance-solidigm/" target="_blank" rel="noopener">We Bought 1347 Used Data Center SSDs to Look at SSD Endurance</a>
+      </h4>
+      <p class="summary" dir="auto">We share data on what we have seen other organizations use in terms of drive writes per day and find many are overbuying SSD endurance
+The post We Bought 1347 Used Data Center SSDs to Look at SSD Endurance appeared first on ServeTheHome.
+</p>
+      <small class="source">
+        via <a href="https://www.servethehome.com/">ServeTheHome</a>
+      </small>
+      <small class="date">August 8, 2024</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://simonwillison.net/2024/Aug/8/django-http-debug/#atom-entries" target="_blank" rel="noopener">django-http-debug, a new Django app mostly written by Claude</a>
+      </h4>
+      <p class="summary" dir="auto">Yesterday I finally developed something I’ve been casually thinking about building for a long time: django-http-debug. It’s a reusable Django app - something you can pip install into any Django project - which provides tools for quickly setting up a URL t…</p>
+      <small class="source">
+        via <a href="http://simonwillison.net/">Simon Willison&#39;s Weblog: Entries</a>
+      </small>
+      <small class="date">August 8, 2024</small>
+    </div>
+    
+  </section>
+  <p class="attribution">
+    Generated by
+    <a href="https://git.sr.ht/~sircmpwn/openring">openring</a>
+  </p>
+</section>
+<style>
+.webring .articles {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+}
+.webring .title {
+  margin: 0;
+}
+.webring .article {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background: #444;
+  min-width: 10rem;
+}
+.webring .summary {
+  font-size: 0.8rem;
+  flex: 1 1 0;
+}
+.webring .attribution {
+  text-align: right;
+  font-size: 0.8rem;
+  color: lightgray;
+}
+</style>
+
+
+  </main>
+  <footer>
+    <p>
+    <a href="mailto:lev@levlaz.org">lev@levlaz.org</a>
+    <br/>
+    <img alt="rss symbol" src="/img/rss.svg" height="10"><a href="/index.xml">rss</a>
+    <br/>
+    <a rel="me" target="_blank" href="https://hachyderm.io/@levlaz">mastodon</a>
+    <br/>
+    <a target="_blank" href="https://github.com/levlaz"> github </a>
+</p>
+
+<p>Having the best day of my life.</p>
+
+<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/">
+    <br>
+    <a property="dct:title" rel="cc:attributionURL" href="https://levlaz.org">levlaz.org</a> &copy; 2004-2024 by <span property="cc:attributionName">Lev Lazinskiy</span> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0</a>
+    <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt="">
+</p> 
+
+<div style="margin-bottom: 25px;">
+    <form method="get" id="ddgSearch" action="https://duckduckgo.com/">
+    <input type="hidden" name="sites" value="levlaz.org"/>
+    <input type="hidden" name="k7" value="#ffffff"/>
+    <input type="hidden" name="k8" value="#222222"/>
+    <input type="hidden" name="k9" value="#00278e"/>
+    <input type="hidden" name="kx" value="#20692b"/>
+    <input type="hidden" name="kj" value="#fafafa"/>
+    <input type="hidden" name="kt" value="p"/>
+    <img style="float:left;padding-right: 5px;" src="/img/ddg.ico" width="22px">
+    <input type="text" name="q" placeholder="Search this site..." aria-label="Search levlaz.org on DuckDuckGo"/>
+    <button type="submit">Search</button>
+</form>
+</div>
+    
+
+  </footer>
+</body>
+</html>
