@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<meta property="fediverse:creator" content="levlaz@hachyderm.io" />
+<title>Salesforce DX External Sharing Model | Lev Lazinskiy</title>
+
+      <link rel="stylesheet" href="/css/main.min.d073dc12717b0891bd9ae196398af0cff3f95413ea3cba3a996e60cb7bb049e1.css" integrity="sha256-0HPcEnF7CJG9muGWOYrwz/P5VBPqPLo6mW5gy3uwSeE=" crossorigin="anonymous">
+
+
+      <script src="/js/main.23cd0c7d837263b9eaeb96ee2d9ccfa2969daa3fa00fa1c1fe8701a9b87251a1.js" integrity="sha256-I80MfYNyY7nq65buLZzPopadqj&#43;gD6HB/ocBqbhyUaE=" crossorigin="anonymous"></script>
+
+<script defer data-domain="levlaz.org" src="https://analytics.levlaz.org/js/script.js"></script>
+
+
+</head>
+<body>
+  <div id="rainbow"></div>
+  <header>
+    <h1><a class="logo" href="/">Lev Lazinskiy</a></h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a style="margin-left:10px;" href="/about/">About</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" aria-current="true" class="ancestor" href="/archive/">Archive</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/tags/">Tags</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/now/">Now</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/links/">Links</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/index.xml">Feed</a>
+    </li>
+    </ul>
+  </nav>
+
+
+
+  </header>
+  <main>
+    
+<script defer page-type="blogpost" data-domain="levlaz.org" src="https://plausible.io/js/script.pageview-props.js"></script>
+<h2 style="margin-bottom:0">Salesforce DX External Sharing Model</h2>
+
+  <div style="color:grey">
+    
+    
+    <time datetime="2018-02-28T22:45:38-08:00">February 28, 2018</time> |  
+      <a href="/tags/programming/">programming</a> |
+      <a href="/tags/salesforce/">salesforce</a> |
+
+  </div>
+
+  <p>I was working through the <a href="https://trailhead.salesforce.com/trails/sfdx_get_started/projects/quick-start-salesforce-dx/steps/create-and-test-our-scratch-org">Getting Started with Salesforce DX</a> module on trailhead and when it came time to push the Dreamhouse app up to my scratch org I got a dozen or so error messages complaining about all sorts of things.</p>
+<pre>PROJECT PATH                                                                                    ERROR
+──────────────────────────────────────────────────────────────────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+force-app/main/default/objects/Property__c/Property__c.object-meta.xml                          Can't specify an external sharing model for Property__c
+force-app/main/default/objects/Favorite__c/fields/Property__c.field-meta.xml                    referenceTo value of 'Property__c' does not resolve to a valid sObject type (65:13)
+force-app/main/default/objects/Favorite__c/listViews/All.listView-meta.xml                      In field: columns - no CustomField named Favorite__c.Property__c found (88:16)
+force-app/main/default/layouts/Broker__c-Broker Layout.layout-meta.xml                          In field: relatedList - no CustomField named Property__c.Broker__c found (81:19)
+force-app/main/default/layouts/Favorite__c-Favorite Layout.layout-meta.xml                      In field: field - no CustomField named Favorite__c.Property__c found (13:26)</pre>
+<p>Luckily the error messages are pretty useful. In this case it looks like the &ldquo;External Sharing Model&rdquo; was not turned on in my scratch org. This appears to be turned off by default.</p>
+<p>In order to get this step to work:</p>
+<ol>
+ 	<li style="list-style-type: none;">
+<ol>
+ 	<li>Log into your scratch org <code>sfdx force:org:open</code></li>
+ 	<li>Go to <strong>Setup</strong></li>
+ 	<li>In the Quick Search box look for <strong>Sharing Settings</strong></li>
+ 	<li>Click on <strong>Enable External Sharing Model </strong></li>
+</ol>
+</li>
+</ol>
+<img class="alignnone size-full wp-image-586" src="https://levlaz.org/wp-content/uploads/2018/02/Sharing_Settings___Salesforce.png" alt="Sharing_Settings___Salesforce" width="1930" height="562" />Now you can run the push command and deploy the Dreamhouse app without any issues.
+<p>Keep on trailbalazing!</p>
+<p> </p>
+
+
+  <div class="more">
+    <p>
+        Thank you for reading! Share your thoughts with  me 
+        on <a href="https://hachyderm.io/@levlaz">mastodon</a> or via 
+        <a id="email" href="mailto:lev@levlaz.org?subject=Re: your blog post">email</a>. 
+
+	<script>
+		document.getElementById('email').addEventListener('click', function(event) {
+			event.preventDefault();
+			var email = 'lev@levlaz.org';
+			var subject = encodeURIComponent(document.title);
+			var mailToLink = 'mailto:' + email + '?subject=Re: ' + subject;
+
+			window.location.href = mailToLink;
+		});
+	</script>
+    </p>
+    <p>
+        Check out some more stuff to read down below.
+    </p>
+        
+        <p>
+            <b>Most popular posts this month</b>
+        </p>
+        <ul>
+            
+            <li>
+                <a href="/dagger-feels-like-magic/">Dagger Feels Like Magic </a>
+            </li>
+            
+            <li>
+                <a href="/setting-up-antlr4-on-windows/">Setting up ANTLR4 on Windows </a>
+            </li>
+            
+            <li>
+                <a href="/sqlite-db-migrations-with-pragma-user_version/">SQLite DB Migrations with PRAGMA user_version </a>
+            </li>
+            
+            <li>
+                <a href="/20-years-of-ubuntu/">20 Years of Ubuntu </a>
+            </li>
+            
+            <li>
+                <a href="/installing-nextcloud-on-a-freebsd-vps/">Installing Nextcloud on a FreeBSD VPS </a>
+            </li>
+            
+        </ul>
+        
+        
+        <p><b>Recent Favorite Blog Posts</b></p>
+        <p> This is a collection of the last 8 posts that I bookmarked.</p>
+        <ul>
+            
+            <li>
+                <a href="https://www.dragonsreach.it/2024/11/16/gnome-infrastructure-migration-to-aws/">Andrea Veri: GNOME Infrastructure migration to AWS</a> from Planet GNOME
+            </li>
+            
+            <li>
+                <a href="https://popagandhi.com/photos/a-whale-of-a-time/">A Whale of a Time</a> from https://popagandhi.com/
+            </li>
+            
+            <li>
+                <a href="https://pluralistic.net/2024/10/16/keep-it-really-simple-stupid/">Pluralistic: You should be using an RSS reader (16 Oct 2024)</a> from Pluralistic: Daily links from Cory Doctorow
+            </li>
+            
+            <li>
+                <a href="https://blog.sahilister.in/2024/10/25-a-quarter-of-a-century-later/">Sahil Dhiman: 25, A Quarter of a Century Later</a> from Planet Debian
+            </li>
+            
+            <li>
+                <a href="https://nabeelqu.substack.com/p/reflections-on-palantir">Reflections on Palantir</a> from Nabeel S. Qureshi
+            </li>
+            
+            <li>
+                <a href="https://kevquirk.com/blog/reading-old-posts">Reading Old Posts</a> from Kev Quirk
+            </li>
+            
+            <li>
+                <a href="https://world.hey.com/dhh/capture-less-than-you-create-c30e462e">Capture less than you create</a> from David Heinemeier Hansson
+            </li>
+            
+            <li>
+                <a href="https://renecoignard.com/a-time-for-compassion/">A Time for Compassion</a> from René Coignard
+            </li>
+            
+        </ul>
+        
+</div>
+
+  
+<section class="webring">
+  <h3>Articles from blogs I follow around the net</h3>
+  <section class="articles">
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://colinwalker.blog/?date=2024-10-17" target="_blank" rel="noopener">17/10/2024</a>
+      </h4>
+      <p class="summary" dir="auto"># Like : Bix Dot Blog — The Music Of The Spheres...
+
+... there’s never been a blogosphere. The one he [Venkatesh Rao] remembers and was a part of isn’t the one I remember and was a part of before 2007. Blogospheres pop in and out of existence like particles…</p>
+      <small class="source">
+        via <a href="https://colinwalker.blog">Colin Walker - Daily Feed</a>
+      </small>
+      <small class="date">October 19, 2024</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://www.jwz.org/blog/2024/10/contrafactuals/" target="_blank" rel="noopener">Contrafactuals</a>
+      </h4>
+      <p class="summary" dir="auto">Making a list of pros and cons of getting in a time machine and going back to 1992 to run a nightclub.
+
+Cons:
+
+Everyone smokes inside, all the time, everywhere. So disgusting.
+
+Pros:
+
+Literally everything about:
+
+The entertainment industry;
+The music industry;
+The ec…</p>
+      <small class="source">
+        via <a href="https://www.jwz.org/blog/">jwz</a>
+      </small>
+      <small class="date">October 18, 2024</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://pluralistic.net/2024/10/18/states-rights/" target="_blank" rel="noopener">Pluralistic: Blue states should play &#34;constitutional hardball&#34; (18 Oct 2024)</a>
+      </h4>
+      <p class="summary" dir="auto">Today&#39;s links Blue states should play &#34;constitutional hardball&#34;: Scooping up medical professionals, teachers, doctors and anyone with a trans kid. Hey look at this: Delights to delectate. This day in history: 2004, 2014, 2019, 2023 Upcoming ap…</p>
+      <small class="source">
+        via <a href="https://pluralistic.net">Pluralistic: Daily links from Cory Doctorow</a>
+      </small>
+      <small class="date">October 18, 2024</small>
+    </div>
+    
+  </section>
+  <p class="attribution">
+    Generated by
+    <a href="https://git.sr.ht/~sircmpwn/openring">openring</a>
+  </p>
+</section>
+<style>
+.webring .articles {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+}
+.webring .title {
+  margin: 0;
+}
+.webring .article {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background: #444;
+  min-width: 10rem;
+}
+.webring .summary {
+  font-size: 0.8rem;
+  flex: 1 1 0;
+}
+.webring .attribution {
+  text-align: right;
+  font-size: 0.8rem;
+  color: lightgray;
+}
+</style>
+
+
+  </main>
+  <footer>
+    <p>
+    <a href="mailto:lev@levlaz.org">lev@levlaz.org</a>
+    <br/>
+    <img alt="rss symbol" src="/img/rss.svg" height="10"><a href="/index.xml">rss</a>
+    <br/>
+    <a rel="me" target="_blank" href="https://hachyderm.io/@levlaz">mastodon</a>
+    <br/>
+    <a target="_blank" href="https://github.com/levlaz"> github </a>
+    <br />
+    <a href="/micro"> microblog </a>
+</p>
+
+<p>Having the best day of my life.</p>
+
+<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/">
+    <br>
+    <a property="dct:title" rel="cc:attributionURL" href="https://levlaz.org">levlaz.org</a> &copy; 2004-2024 by <span property="cc:attributionName">Lev Lazinskiy</span> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0</a>
+    <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt="">
+</p> 
+
+<div style="margin-bottom: 25px;">
+    <form method="get" id="ddgSearch" action="https://duckduckgo.com/">
+    <input type="hidden" name="sites" value="levlaz.org"/>
+    <input type="hidden" name="k7" value="#ffffff"/>
+    <input type="hidden" name="k8" value="#222222"/>
+    <input type="hidden" name="k9" value="#00278e"/>
+    <input type="hidden" name="kx" value="#20692b"/>
+    <input type="hidden" name="kj" value="#fafafa"/>
+    <input type="hidden" name="kt" value="p"/>
+    <img style="float:left;padding-right: 5px;" src="/img/ddg.ico" width="22px">
+    <input type="text" name="q" placeholder="Search this site..." aria-label="Search levlaz.org on DuckDuckGo"/>
+    <button type="submit">Search</button>
+</form>
+</div>
+    
+
+  </footer>
+</body>
+</html>
