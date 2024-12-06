@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>debian on Lev Lazinskiy</title>
+    <link>https://levlaz.org/tags/debian/</link>
+    <description>Recent content in debian on Lev Lazinskiy</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 08 Jul 2024 06:36:00 +0000</lastBuildDate>
+    <atom:link href="https://levlaz.org/tags/debian/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>First Debian CI Contribution</title>
+      <link>https://levlaz.org/first-debian-ci-contribution/</link>
+      <pubDate>Mon, 08 Jul 2024 06:36:00 +0000</pubDate>
+      <guid>https://levlaz.org/first-debian-ci-contribution/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m so excited to share that I had my &lt;a href=&#34;https://salsa.debian.org/salsa-ci-team/pipeline/-/merge_requests/516&#34;&gt;first contribution to the Debian&#xA;Salsa CI&#xA;team&lt;/a&gt; merged!&lt;/p&gt;&#xA;&lt;p&gt;It&amp;rsquo;s been almost six years since I wrote this &lt;a href=&#34;https://levlaz.org/becoming-a-debian-developer/&#34;&gt;post about wanting to&#xA;become a Debian&#xA;Developer&lt;/a&gt;. I did a bit&#xA;of work with a few of the debian-qa projects, but life got in the way,&#xA;and here we are today.&lt;/p&gt;&#xA;&lt;p&gt;I read the most recent &lt;a href=&#34;https://bits.debian.org/2024/07/bits-from-the-dpl-july.html&#34;&gt;bits from the DPL&lt;/a&gt; where I learned about the&#xA;Salsa CI team for the first time. I sent an email to the team offering&#xA;to help wherever I could, and I got an awesome &lt;a href=&#34;https://alioth-lists.debian.net/pipermail/debian-salsa-ci/2024-July/000132.html&#34;&gt;response from&#xA;Otto&lt;/a&gt;&#xA;giving me a ton of direction on how to get involved.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Scripting GNOME Terminal Tabs in Debian</title>
+      <link>https://levlaz.org/scripting-gnome-terminal-tabs-in-debian/</link>
+      <pubDate>Sat, 06 Jul 2024 05:08:33 +0000</pubDate>
+      <guid>https://levlaz.org/scripting-gnome-terminal-tabs-in-debian/</guid>
+      <description>&lt;p&gt;I know folks that have so many Chrome tabs open that they live in fear&#xA;of their computer turning off because they have no idea how they will&#xA;get back to work. I suffer from the same problem, but with with terminal&#xA;tabs.&lt;/p&gt;&#xA;&lt;p&gt;I run a few services on a server that I connect to remotely over ssh.&#xA;This includes mutt for email, and weechat for hanging out on irc. I also&#xA;ssh into my server whenever I want to schedule a new post for social&#xA;media via the POSSE dagger module that I am working on.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Ladybird on Debian Stable</title>
+      <link>https://levlaz.org/ladybird-on-debian-stable/</link>
+      <pubDate>Tue, 02 Jul 2024 22:01:27 -0700</pubDate>
+      <guid>https://levlaz.org/ladybird-on-debian-stable/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m so excited about the &lt;a href=&#34;https://github.com/LadybirdBrowser&#34;&gt;Ladybird&#xA;browser&lt;/a&gt;. The dream of a fully&#xA;free web browser that is not tied to any commercial interests or funded&#xA;by ads inspires me. I hope to contribute to this project as much as I&#xA;can.&lt;/p&gt;&#xA;&lt;p&gt;I was able to get Ladybird compiled on Debian Stable in a VM, it works!&#xA;It&amp;rsquo;s really special to see something that I think is going to make the&#xA;web a better place this early in its life.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>How to Use Apple AirPods in Debian</title>
+      <link>https://levlaz.org/how-to-use-apple-airpods-in-debian/</link>
+      <pubDate>Sat, 11 May 2019 12:03:11 -0700</pubDate>
+      <guid>https://levlaz.org/how-to-use-apple-airpods-in-debian/</guid>
+      <description>&lt;!-- wp:paragraph --&gt;&#xA;&lt;p&gt;If you try to connect Apple AirPods to a computer running Debian, you will be able to pair them without any issues, but unfortunately you will not be able to use them to play any sounds. When I tried to do this, after pairing the AirPods, clicking on the &lt;strong&gt;Sound Settings &lt;/strong&gt;menu option in the Bluetooth settings only showed the default output as an option. &lt;/p&gt;&#xA;&lt;!-- /wp:paragraph --&gt;&#xA;&lt;!-- wp:paragraph --&gt;&#xA;&lt;p&gt;In order to use AirPods to play sound you need to &lt;a href=&#34;https://askubuntu.com/a/1063582&#34;&gt;tweak the Bluetooth configuration file&lt;/a&gt; a bit. I poked around in that file a bit but I have no idea what the difference between &#34;le&#34; and &#34;br/edr&#34; was until I read &lt;a href=&#34;https://electronics.stackexchange.com/a/258897&#34;&gt;this other stack overflow post&lt;/a&gt; which explained it succinctly. &lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>How to Disable Wayland in Debian Testing</title>
+      <link>https://levlaz.org/how-to-disable-wayland-in-debian-testing/</link>
+      <pubDate>Mon, 29 Apr 2019 11:56:47 -0700</pubDate>
+      <guid>https://levlaz.org/how-to-disable-wayland-in-debian-testing/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m running Debian Testing on a laptop, and I would like to disable Wayland because not all of the tools that I use currently have first-class support for it. There is an &lt;a href=&#34;https://linuxconfig.org/how-to-disable-wayland-and-enable-xorg-display-server-on-ubuntu-18-04-bionic-beaver-linux&#34;&gt;old post&lt;/a&gt; that I used to reference to get this to work, but it appears that &lt;code&gt;gdm3&lt;/code&gt; changed the naming conventions for the configuration file in a newer version.&lt;/p&gt;&#xA;&lt;p&gt;There used to be a file called &lt;code&gt;/etc/gdm3/custom.conf&lt;/code&gt; which appears to have been renamed to &lt;code&gt;/etc/gdm3/daemon.conf&lt;/code&gt; in newer versions of Debian. Luckily the contents of this file are more or less the same.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Becoming a Debian Developer</title>
+      <link>https://levlaz.org/becoming-a-debian-developer/</link>
+      <pubDate>Wed, 27 Jun 2018 15:13:27 -0700</pubDate>
+      <guid>https://levlaz.org/becoming-a-debian-developer/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve been using debian for as long as I remember. I&amp;rsquo;ve always wanted to play a more active role in debian development but for whatever reason I never got around to it. Now that I am 30, older, wiser, I am starting a new push to become a debian developer.&lt;/p&gt;&#xA;&lt;p&gt;So far I have gotten involved in the debian-qa team. Specifically I have been working on fixing some of the newcomer bugs on the distro-tracker project. It&amp;rsquo;s actually been really fun. The code base is django which I am pretty comfortable with. For the first time in many years, I have been rushing home after work so that I could keep hacking on the bugs that I am working on.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Install Netbeans on Debian Stable</title>
+      <link>https://levlaz.org/install-netbeans-on-debian-stable/</link>
+      <pubDate>Thu, 11 May 2017 19:21:06 -0700</pubDate>
+      <guid>https://levlaz.org/install-netbeans-on-debian-stable/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://netbeans.org/&#34;&gt;Netbeans&lt;/a&gt; is a great open source Java IDE. For some reason it is missing from the &lt;a href=&#34;https://packages.debian.org/wheezy/netbeans&#34;&gt;current stable repository on debian&lt;/a&gt;. In order to get it installed as a regular desktop application in Debian Jessie (using GNOME) you should do the following:&lt;/p&gt;&#xA;&lt;ol&gt;&#xA; &#x9;&lt;li&gt;JDK 8 is required in order to use netbeans. The &lt;code&gt;default-jdk&lt;/code&gt;package on Jessie installs jdk7. First you must &lt;a href=&#34;https://backports.debian.org/Instructions/&#34;&gt;enable debian backports&lt;/a&gt;and then you You can install it with &lt;code&gt;sudo apt install -t jessie-backports openjdk-8-jdk&lt;/code&gt;&lt;/li&gt;&#xA; &#x9;&lt;li&gt;Download the latest version from the &lt;a href=&#34;https://netbeans.org/downloads/&#34;&gt;releases page&lt;/a&gt;. There are a couple different flavors. I usually choose the one that contains everything. This will download a bash installer script.&lt;/li&gt;&#xA; &#x9;&lt;li&gt;Open up a terminal and navigate to wherever you downloaded the script from Step 2. Execute the script with &lt;code&gt;sh netbeans*.sh&lt;/code&gt;&lt;/li&gt;&#xA; &#x9;&lt;li&gt;This will run some pre-flight checks and then fire up an installation wizard that will guide you through the rest of the process.&lt;/li&gt;&#xA; &#x9;&lt;li&gt;Once Netbeans has been installed you can launch it by clicking on the icon that should now be on your desktop.&lt;/li&gt;&#xA;&lt;/ol&gt;</description>
+    </item>
+    <item>
+      <title>Using gtk-doc with Anjuta on Debian Stable</title>
+      <link>https://levlaz.org/using-gtk-doc-with-anjuta-on-debian-stable/</link>
+      <pubDate>Tue, 09 May 2017 19:21:24 -0700</pubDate>
+      <guid>https://levlaz.org/using-gtk-doc-with-anjuta-on-debian-stable/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://www.gtk.org/gtk-doc/&#34;&gt;gtk-doc&lt;/a&gt; is a library that helps extract code documentation. When you create a new project with &lt;a href=&#34;https://anjuta.org/&#34;&gt;Anjuta&lt;/a&gt; it asks if you wish to include gkt-doc. Unfortunately, on Debian stable there seems to be a bug because the autoconf configuration is looking for the wrong version of gtk-doc.&lt;/p&gt;&#xA;&lt;div class=&#34;codehilite&#34;&gt;&#xD;&#xA;&lt;pre&gt;/home/levlaz/git/librefocus/configure: line 13072: syntax error near unexpected token `1.0&#39;&#xD;&#xA;/home/levlaz/git/librefocus/configure: line 13072: `GTK_DOC_CHECK(1.0)&#39;&#xD;&#xA;&lt;/pre&gt;&#xD;&#xA;&lt;/div&gt;&#xD;&#xA;On Debian stable, the version of GTK doc that comes with the&lt;a href=&#34;https://packages.debian.org/jessie/gtk-doc-tools&#34;&gt;&lt;code&gt;gtk-doc-tools&lt;/code&gt;&lt;/a&gt; package is 1.21. In order to resolve this error you need to update &lt;code&gt;configure.ac&lt;/code&gt; to use the newer version of gtk-doc as shown below:&#xD;&#xA;&lt;div class=&#34;codehilite&#34;&gt;&#xD;&#xA;&lt;pre&gt;GTK_DOC_CHECK([1.21])&#xD;&#xA;&lt;/pre&gt;&#xD;&#xA;&lt;/div&gt;&#xD;&#xA;Then you need to regenerate the entire project and everything should work as expected.</description>
+    </item>
+    <item>
+      <title>Help Out With Packages You Use in Debian</title>
+      <link>https://levlaz.org/help-out-with-packages-you-use-in-debian/</link>
+      <pubDate>Wed, 03 May 2017 19:23:18 -0700</pubDate>
+      <guid>https://levlaz.org/help-out-with-packages-you-use-in-debian/</guid>
+      <description>&lt;p&gt;Many new and existing Debian users want to help make the distribution  better but do not quite know where to begin. Debian comes with a very handy package called &lt;a href=&#34;https://wiki.debian.org/how-can-i-help&#34;&gt;&lt;code&gt;how-can-i-help&lt;/code&gt;&lt;/a&gt; which tells you after each &lt;code&gt;apt&lt;/code&gt;invocation the current bugs that are associated with packages on your system. The &amp;ldquo;&lt;a href=&#34;https://www.debian.org/devel/wnpp/&#34;&gt;Work-Needing and Perspective Packages&lt;/a&gt;&amp;rdquo; (WNPP) listing is a bit overwhelming for new contributors. What better way to figure out what packages need your help than by seeing a list of them each time you use apt.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Using Owncloud Client for Nextcloud Server on Debian Stable</title>
+      <link>https://levlaz.org/using-owncloud-client-for-nextcloud-server-on-debian-stable/</link>
+      <pubDate>Tue, 02 May 2017 19:23:36 -0700</pubDate>
+      <guid>https://levlaz.org/using-owncloud-client-for-nextcloud-server-on-debian-stable/</guid>
+      <description>&lt;p&gt;There is no official debian package for the nextcloud client. There have been a handful of RFP bugs reported but it looks like no one has taken this on yet. I want to get more involved with debian packaging so this might be a great first package to maintain. For the time being, the owncloud client is still backwards compatible with nextcloud. Unfortunately, the &lt;a href=&#34;https://packages.debian.org/jessie/owncloud-client&#34;&gt;version that ships with Debian stable&lt;/a&gt; (8, jessie at the time of writing) is a bit old. When I tried to connect to my nextcloud instance it complained that my password was incorrect. Luckily, there is a &lt;a href=&#34;https://packages.debian.org/jessie-backports/owncloud-client&#34;&gt;slightly newer version&lt;/a&gt; available in jessie-backports  which has no trouble connecting to nextcloud. The steps to get a working version of owncloud-client to work with the latest stable version of Nextcloud are as follows:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Change the Default Terminal Editor in Debian</title>
+      <link>https://levlaz.org/change-the-default-terminal-editor-in-debian/</link>
+      <pubDate>Fri, 28 Apr 2017 19:24:15 -0700</pubDate>
+      <guid>https://levlaz.org/change-the-default-terminal-editor-in-debian/</guid>
+      <description>&lt;p&gt;Debian comes with a very handy utility called &lt;a href=&#34;https://manpages.debian.org/jessie/dpkg/update-alternatives.8.en.html&#34;&gt;update-alternatives&lt;/a&gt; that helps to set default tools for various tasks.&lt;/p&gt;&#xA;&lt;blockquote&gt;It is possible for several programs fulfilling the same or similar functions to be installed on a single system at the same time. For example, many systems have several text editors installed at once. This gives choice to the users of a system, allowing each to use a different editor, if desired, but makes it difficult for a program to make a good choice for an editor to invoke if the user has not specified a particular preference.&lt;/blockquote&gt;&#xD;&#xA;On Linode, it seems that the default editor is nano, I prefer to use vim for editing git commits, visudo, and other things that use the default editor which is symbolically linked through &lt;code&gt;/usr/bin/editor.&lt;/code&gt; The update-alternatives package basically changes the symbolic links for you. In order to change your default editor, you simply need to run the following command:&#xD;&#xA;&lt;div class=&#34;codehilite&#34;&gt;&#xD;&#xA;&lt;pre&gt;sudo update-alternatives --config editor&#xD;&#xA;&lt;/pre&gt;&#xD;&#xA;&lt;/div&gt;&#xD;&#xA;The output of this command is shown below. You will see a list of all of your editors that you currently have installed and will be asked to make a choice.&#xD;&#xA;&lt;div class=&#34;codehilite&#34;&gt;&#xD;&#xA;&lt;pre&gt;There are 3 choices for the alternative editor (providing /usr/bin/editor).&#xD;&#xA;&lt;h2 id=&#34;selection-path-priority-status&#34;&gt;&#xA;  Selection Path Priority Status&#xA;  &lt;a href=&#34;#selection-path-priority-status&#34;&gt;&#xA;    &lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;25&#34; height=&#34;25&#34; fill=&#34;currentColor&#34; class=&#34;bi bi-link&#34; viewBox=&#34;0 0 16 16&#34;&gt;&#xA;      &lt;path d=&#34;M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z&#34;/&gt;&#xA;      &lt;path d=&#34;M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z&#34;/&gt;&#xA;    &lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;0 /bin/nano 40 auto mode&#xA;1 /bin/nano 40 manual mode&#xA;2 /usr/bin/vim.basic 30 manual mode&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Installing LXQt on Debian Testing</title>
+      <link>https://levlaz.org/installing-lxqt-on-debian-testing/</link>
+      <pubDate>Sun, 10 Jul 2016 18:55:24 -0700</pubDate>
+      <guid>https://levlaz.org/installing-lxqt-on-debian-testing/</guid>
+      <description>&lt;div id=&#34;outline-container-sec-1&#34; class=&#34;outline-2&#34;&gt;&#xD;&#xA;&lt;h2 id=&#34;sec-1&#34;&gt;Introduction&lt;/h2&gt;&#xD;&#xA;&lt;div id=&#34;text-1&#34; class=&#34;outline-text-2&#34;&gt;Ever since I read about the merger of LXDE and Razor-Qt into the &lt;a href=&#34;https://lxqt.org/&#34;&gt;LXQt&lt;/a&gt;project I have been patiently waiting for it to be available on Debian. Razor-QT was a beautiful, clean, and fast desktop environment, and LXDE has always been my go to choice for low power hardware. I have tried installing LXQt a few times in the past running sid, but the experience was never as good as I would have liked it to be. This weekend I finally got a chance to install it with the latest version of Debian Testing, and I am excited to announce that its wonderful. I have been growing disillusioned with the state of the Linux Desktop for a while now. Back in the GNOME2 days I could always count on my Linux Desktop being as fast, responsive, and sane. But GNOME3, Unity, and even KDE 5 feel clunky and slow (especially in a Virtual Machine). I want my Desktop Environment to get out of my way and let me do my work, and LXQt lets me do just that.&lt;/div&gt;&#xD;&#xA;&lt;/div&gt;&#xD;&#xA;&lt;div id=&#34;outline-container-sec-2&#34; class=&#34;outline-2&#34;&gt;&#xD;&#xA;&lt;h2 id=&#34;sec-2&#34;&gt;Installation&lt;/h2&gt;&#xD;&#xA;&lt;div id=&#34;text-2&#34; class=&#34;outline-text-2&#34;&gt;Installation is pretty straight forward. I would recommend starting fresh, and install &lt;a href=&#34;https://www.debian.org/devel/debian-installer/&#34;&gt;Debian Testing&lt;/a&gt; &#34;standard&#34; (i.e. no Desktop Environment at all). Once you have gone through the regular installation process, you should find yourself in a shell. Install xorg and lxqt with the following commands:&#xD;&#xA;&lt;div class=&#34;org-src-container&#34;&gt;&#xD;&#xA;&lt;pre class=&#34;src src-bash&#34;&gt;apt update&#xD;&#xA;apt install xorg lxqt -y&#xD;&#xA;&lt;/pre&gt;&#xD;&#xA;&lt;/div&gt;&#xD;&#xA;This may take a while, but once this process is complete you can reboot and you will find yourself in a beautiful, modern, fast, and productive desktop environment.&lt;/div&gt;&#xD;&#xA;&lt;/div&gt;&#xD;&#xA;&lt;div id=&#34;outline-container-sec-3&#34; class=&#34;outline-2&#34;&gt;&#xD;&#xA;&lt;h2 id=&#34;sec-3&#34;&gt;Post Installation&lt;/h2&gt;&#xD;&#xA;&lt;div id=&#34;text-3&#34; class=&#34;outline-text-2&#34;&gt;You will find yourself in a pretty bare bones environment. I would suggest installing firefox, emacs (or whatever other text editor you like), a mail client (check out &lt;a href=&#34;https://sylpheed.sraoss.jp/en/&#34;&gt;Sylpheed&lt;/a&gt;), Dropbox, and LibreOffice.&lt;/div&gt;&#xD;&#xA;&lt;/div&gt;&#xD;&#xA;&lt;div id=&#34;outline-container-sec-4&#34; class=&#34;outline-2&#34;&gt;&#xD;&#xA;&lt;h2 id=&#34;sec-4&#34;&gt;Parting Thoughts&lt;/h2&gt;&#xD;&#xA;&lt;div id=&#34;text-4&#34; class=&#34;outline-text-2&#34;&gt;My absolute favorite part of LXQt so far is that it comes with the awesome &lt;a href=&#34;https://github.com/lxde/qterminal&#34;&gt;qterminal&lt;/a&gt; application which has simple horizontal and vertical splitting similar to iTerm2. This is the first time that I have been exposed to this emulator and I love it so far. Kudos to the LXQt team for an amazing release, and thank you to the Debian maintainers for packaging this up nicely. I am looking forward to continue to see LXQt improve. If you are looking for a fast, traditional desktop experience, I would highly recommend giving LXQt a try.&lt;/div&gt;&#xD;&#xA;&lt;/div&gt;</description>
+    </item>
+    <item>
+      <title>Installing cgit &#43; nginx on Debian Jessie</title>
+      <link>https://levlaz.org/installing-cgit--nginx-on-debian-jessie/</link>
+      <pubDate>Sun, 23 Aug 2015 21:42:25 -0700</pubDate>
+      <guid>https://levlaz.org/installing-cgit--nginx-on-debian-jessie/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://git.zx2c4.com/cgit/&#34;&gt;cgit&lt;/a&gt; is a hyperfast web frontend for git repositories written in C. Coupled with nginx, this makes a super quick git repository viewer for your web server. I was not able to find a good tutorial on how to get this installed with nginx on a Debian server. The latest version of Debian Stable (Jessie) comes with cgit already in the repositories so a lot of previous tutorials that had you compile cgit are no longer necessary unless you really need the latest and greatest version of cgit.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Using Virt-Manager on Debian</title>
+      <link>https://levlaz.org/using-virt-manager-on-debian/</link>
+      <pubDate>Sat, 15 Aug 2015 18:24:39 -0700</pubDate>
+      <guid>https://levlaz.org/using-virt-manager-on-debian/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://virt-manager.org/&#34;&gt;Virt-Manager&lt;/a&gt; is an awesome front end for running QEMU VMs on top of KVM. This is a great alternative to VirutalBox and since the latest version of Virtualbox has been moved to the “contrib” section in Debian (due to a non-free compiler that is required to builds the BIOS) it is one of the only 100% free software GUIs for managing virtual machines. To get virt-manager working debian you will need the following:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Installing Powerline in Debian</title>
+      <link>https://levlaz.org/installing-powerline-in-debian/</link>
+      <pubDate>Thu, 18 Jun 2015 17:56:44 -0700</pubDate>
+      <guid>https://levlaz.org/installing-powerline-in-debian/</guid>
+      <description>&lt;p&gt;Powerline is an awesome status bar that tells you additional information about various things in bash, vim, and tmux. It comes in handy and makes your terminal look sweet. It is a little bit of a PITA to install, but it is totally worth it. I got most of the way there with this &lt;a href=&#34;https://askubuntu.com/questions/283908/how-can-i-install-and-use-powerline-plugin&#34;&gt;very helpful Stack Overflow answer&lt;/a&gt;. But I ran into an issue with vim in Debian. I was getting an error telling me that vim needs to be compiled with python support in order for powerline to work. This seemed silly to me because you should not have to recompile vim in order to use this little plugin. Luckily the solution was easy. There are like 20 different vim packages in debian. The default vim package gives you a bare bones vim install. In order to take advantage of this plugin and other goodies you should install the &lt;a href=&#34;https://packages.debian.org/stretch/vim-nox&#34;&gt;vim-nox&lt;/a&gt; package. In order to install powerline in debian you should do the following. This will install everything system wide.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
