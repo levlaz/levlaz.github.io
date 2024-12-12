@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<meta name="fediverse:creator" content="@levlaz@hachyderm.io">
+<title>Org Mode To Google Docs and Beyond | Lev Lazinskiy</title>
+
+      <link rel="stylesheet" href="/css/main.min.a58b9bd12698b946fb47eb9909004f110d02fc032a4a3ff94ce557d273a62249.css" integrity="sha256-pYub0SaYuUb7R&#43;uZCQBPEQ0C/AMqSj/5TOVX0nOmIkk=" crossorigin="anonymous">
+
+
+      <script src="/js/main.23cd0c7d837263b9eaeb96ee2d9ccfa2969daa3fa00fa1c1fe8701a9b87251a1.js" integrity="sha256-I80MfYNyY7nq65buLZzPopadqj&#43;gD6HB/ocBqbhyUaE=" crossorigin="anonymous"></script>
+
+<script defer data-domain="levlaz.org" src="https://analytics.levlaz.org/js/script.js"></script>
+
+
+</head>
+<body>
+  <div id="rainbow"></div>
+  <header>
+    <h1><a class="logo" href="/">Lev Lazinskiy</a></h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a style="margin-left:10px;" href="/about/">About</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" aria-current="true" class="ancestor" href="/archive/">Archive</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/tags/">Tags</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/now/">Now</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/links/">Links</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/index.xml">Feed</a>
+    </li>
+    </ul>
+  </nav>
+
+
+
+  </header>
+  <main>
+    
+<script defer page-type="blogpost" data-domain="levlaz.org" src="https://plausible.io/js/script.pageview-props.js"></script>
+<h2 style="margin-bottom:0">Org Mode To Google Docs and Beyond</h2>
+
+  <div style="color:grey">
+    
+    
+    <time datetime="2016-07-08T18:55:44-07:00">July 8, 2016</time> |  
+      <a href="/tags/foss/">foss</a> |
+      <a href="/tags/software/">software</a> |
+
+  </div>
+
+  <div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Introduction</h2>
+<div id="text-1" class="outline-text-2">The other day I was attempting to make a structured document. It has been years since I have done this and I have forgotten what a pain in the ass most word processing software is. When I used to work for a .NET enterprise health care company, I would often find myself in "Word Hell" with no hope of ever returning. This time I found myself in a new place, Google Docs Hell. It's similar to Word hell, but runs in the cloud. All that I was really trying to do was create a document with numbered headings and a simple table of contents that links to said headings. I suppose that this is too much to ask for because although I was able to get my headings to work more or less, as soon as I tried to add content under the headings Google Docs decided that I really wanted random page breaks after every heading. After banging my head against the wall for a few minutes, with no clue on how to even begin to troubleshoot this issue, I busted out my trusty old friend Emacs. Emacs <a href="https://orgmode.org/">Org Mode</a> has never failed me. I remember back in college when I needed to add code snippets or non-trivial equations into a document that I was working on, and this was a seemingly impossible task in any word processor that I found. Org Mode is well suited for this type of task since it is a plain text system, and in my experience plain text combined with a sane "compiler" is the only way to truly have <i>WYSIWYG</i>. Other native WYSIWYG editors like Word, Pages, Google Docs, and even LibreOffice are very complex pieces of software, so figuring out why a random page break is being inserted in the middle of an ordered list is only possible if you have no value for your time.</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Enabling Org Mode Exporting to ODT</h2>
+<div id="text-2" class="outline-text-2">Recent versions of Org Mode are capable of exporting directory to ODT format, and it works more or less very well, but the documentation is not the greatest. For instance, <a href="https://orgmode.org/manual/Pre_002drequisites-for-ODT-export.html#Pre_002drequisites-for-ODT-export">this page</a> says:
+<blockquote>The ODT exporter relies on the zip program to create the final output. Check the availability of this program before proceeding further.</blockquote>
+But it does not really tell you what <code>zip</code> really is. I am assuming its whatever is in my $PATH on OS X, but I can't really be too sure.
+<div class="org-src-container">
+<pre class="src src-bash">Copyright (c) 1990-2008 Info-ZIP - Type 'zip "-L"' for software license.
+Zip 3.0 (July 5th 2008). Usage:
+</pre>
+</div>
+Also, no where in the docs does it tell you how to enable ODT exporting. In order to be able to export to ODT like you would export to any other format using the <code>C-c C-e</code> export menu, you need to explicitly enable <code>ox-odt</code> somewhere in your org-mode configuration file. Check out my <a href="https://github.com/levlaz/.emacs.d/blob/master/customizations/setup-org.el">.emacs.d</a> repo for an example, but essentially adding this somewhere in your startup scripts should do the trick:
+<div class="org-src-container">
+<pre class="src src-elisp">;; Load ODT backend to allow for exporting to open document format.
+(require 'ox-odt)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Exporting to ODT</h2>
+<div id="text-3" class="outline-text-2">With all of that out of the way, we are free to start exporting things to ODT. Fire up org mode and write your document to your hearts content. When you are finished you can export it to ODT with <code>C-c C-e o o</code>. Opening up this file in LibreOffice or OpenOffice should show you a really nice representation of whatever you just wrote. The best part about this method is that you get a table of contents, and section numbering for free. In addition, you do not have to keep track of the numbers yourself, if you need to move stuff around or add new sections then org mode export will automatically update the numbering for you. Besides being able to export to ODT, org-mode also supports exporting to about a dozen other formats. If you have <a href="https://www.latex-project.org/">LaTeX</a> and <a href="https://pandoc.org/">pandoc</a> installed then the sky is truly the limit.</div>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Uploading to Google Docs</h2>
+<div id="text-4" class="outline-text-2">While the editing capabilities of Google Docs are suspect, it is difficult to argue that its not one of the best tools for collaborating with your team. Unless you are writing a manifesto in a cabin, you likely want to share your latest creation with your team for feedback. I would not recommend uploading the ODT directly to Google Docs, since the formatting can get a bit thrown off. Instead I suggest exporting the file from LibreOffice into <code>.doc</code> or <code>.docx</code> and then uploading that. From my preliminary experiments this seemed to work the best.</div>
+</div>
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">Conclusion</h2>
+<div id="text-5" class="outline-text-2">If you are writing a complex structured document, especially one with formulas or code snippets. You will be hard pressed to find a better environment than Emacs with org-mode. Enabling the ODT export in org-mode makes it fairly simple to upload your documents to Google Docs and be able to collaborate with your team.</div>
+</div>
+
+
+  <div class="more">
+    <p>
+        Thank you for reading! Share your thoughts with me 
+        on <a href="https://bsky.app/profile/levlaz.org"> bluesky</a>, <a href="https://hachyderm.io/@levlaz">mastodon</a>, or via 
+        <a id="email" href="mailto:lev@levlaz.org?subject=Re: your blog post">email</a>. 
+
+	<script>
+		document.getElementById('email').addEventListener('click', function(event) {
+			event.preventDefault();
+			var email = 'lev@levlaz.org';
+			var subject = encodeURIComponent(document.title);
+			var mailToLink = 'mailto:' + email + '?subject=Re: ' + subject;
+
+			window.location.href = mailToLink;
+		});
+	</script>
+    </p>
+    <p>
+        Check out some more stuff to read down below.
+    </p>
+        
+        <p>
+            <b>Most popular posts this month</b>
+        </p>
+        <ul>
+            
+            <li>
+                <a href="/setting-up-antlr4-on-windows/">Setting up ANTLR4 on Windows </a>
+            </li>
+            
+            <li>
+                <a href="/meritocracy/">Meritocracy? </a>
+            </li>
+            
+            <li>
+                <a href="/possible-plagiarism-made-me-cringe/">Possible Plagiarism Made me Cringe </a>
+            </li>
+            
+            <li>
+                <a href="/sqlite-db-migrations-with-pragma-user_version/">SQLite DB Migrations with PRAGMA user_version </a>
+            </li>
+            
+            <li>
+                <a href="/using-plex-with-nextcloud/">Using Plex with Nextcloud </a>
+            </li>
+            
+        </ul>
+        
+        
+        <p><b>Recent Favorite Blog Posts</b></p>
+        <p> This is a collection of the last 8 posts that I bookmarked.</p>
+        <ul>
+            
+            <li>
+                <a href="https://cacm.acm.org/blogcacm/the-rise-of-bluesky/">The Rise of Bluesky</a> from Communications of the ACM
+            </li>
+            
+            <li>
+                <a href="https://thecreativeindependent.com/people/podcaster-dj-and-writer-dj-louie-xiv-on-going-for-it-even-if-youre-terrified/">Podcaster, DJ, and writer DJ Louie XIV on going for it (even if you’re terrified)</a> from The Creative Independent
+            </li>
+            
+            <li>
+                <a href="https://rknight.me/blog/useful-bluesky-tools/">Useful Bluesky Tools</a> from Robb Knight • Posts • Atom Feed
+            </li>
+            
+            <li>
+                <a href="https://cdevroe.com/2024/11/18/re-bluesky/">Re: Bluesky</a> from Colin Devroe
+            </li>
+            
+            <li>
+                <a href="https://www.straphanger.blog/from-the-red-hell-to-the-sky-of-blue/">From the Red Hell to the Sky of Blue</a> from Straphanger
+            </li>
+            
+            <li>
+                <a href="https://sive.rs/salt">We don’t need to use what we make</a> from Derek Sivers blog
+            </li>
+            
+            <li>
+                <a href="https://soumyadghosh.github.io/website/blog/ubuntu-summit-2024/">Ubuntu Summit 2024: A joyful experience filled with sorrow</a> from Planet KDE | English
+            </li>
+            
+            <li>
+                <a href="https://www.jwz.org/blog/2024/11/sabotage/">Sabotage</a> from jwz
+            </li>
+            
+        </ul>
+        
+</div>
+
+  
+<section class="webring">
+  <h3>Articles from blogs I follow around the net</h3>
+  <section class="articles">
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://colinwalker.blog/?date=2024-11-17" target="_blank" rel="noopener">17/11/2024</a>
+      </h4>
+      <p class="summary" dir="auto"># Back in May I wrote about being inspired to write a track based on a YouTube comment.
+I recorded a test not long after and built on that into June. Then the breakdown struck and I had a massive crisis of confidence alongside the depression and anxiety.
+I …</p>
+      <small class="source">
+        via <a href="https://colinwalker.blog">Colin Walker - Daily Feed</a>
+      </small>
+      <small class="date">December 12, 2024</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://www.jwz.org/blog/2024/12/13256604/" target="_blank" rel="noopener">ykec</a>
+      </h4>
+      <p class="summary" dir="auto">&#34;Please don&#39;t use obvious AI slop on flyers for your event. I get hate mail.&#34;
+
+&#34;It&#39;s not AI, I got it from Adobe Stock!&#34;
+
+[ headdesk ]</p>
+      <small class="source">
+        via <a href="https://www.jwz.org/blog/">jwz</a>
+      </small>
+      <small class="date">December 11, 2024</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://simonwillison.net/2024/Dec/11/gemini-2/#atom-entries" target="_blank" rel="noopener">Gemini 2.0 Flash: An outstanding multi-modal LLM with a sci-fi streaming mode</a>
+      </h4>
+      <p class="summary" dir="auto">Huge announcment from Google this morning: Introducing Gemini 2.0: our new AI model for the agentic era. There&#39;s a ton of stuff in there (including updates on Project Astra and the new Project Mariner), but the most interesting pieces are the things w…</p>
+      <small class="source">
+        via <a href="http://simonwillison.net/">Simon Willison&#39;s Weblog: Entries</a>
+      </small>
+      <small class="date">December 11, 2024</small>
+    </div>
+    
+  </section>
+  <p class="attribution">
+    Generated by
+    <a href="https://git.sr.ht/~sircmpwn/openring">openring</a>
+  </p>
+</section>
+<style>
+.webring .articles {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+}
+.webring .title {
+  margin: 0;
+}
+.webring .article {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background: #444;
+  min-width: 10rem;
+}
+.webring .summary {
+  font-size: 0.8rem;
+  flex: 1 1 0;
+}
+.webring .attribution {
+  text-align: right;
+  font-size: 0.8rem;
+  color: lightgray;
+}
+</style>
+
+
+  </main>
+  <footer>
+    <p>
+    <a href="mailto:lev@levlaz.org">lev@levlaz.org</a>
+    <br/>
+    <img alt="rss symbol" src="/img/rss.svg" height="10"><a href="/index.xml">rss</a>
+    <br/>
+    <a rel="me" target="_blank" href="https://hachyderm.io/@levlaz">mastodon</a>
+    <br/>
+    <a target="_blank" href="https://github.com/levlaz"> github </a>
+    <br />
+    <a href="/micro"> microblog </a>
+</p>
+
+<p>Having the best day of my life.</p>
+
+<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/">
+    <br>
+    <a property="dct:title" rel="cc:attributionURL" href="https://levlaz.org">levlaz.org</a> &copy; 2004-2024 by <span property="cc:attributionName">Lev Lazinskiy</span> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0</a>
+    <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt="">
+</p> 
+
+<div style="margin-bottom: 25px;">
+    <form method="get" id="ddgSearch" action="https://duckduckgo.com/">
+    <input type="hidden" name="sites" value="levlaz.org"/>
+    <input type="hidden" name="k7" value="#ffffff"/>
+    <input type="hidden" name="k8" value="#222222"/>
+    <input type="hidden" name="k9" value="#00278e"/>
+    <input type="hidden" name="kx" value="#20692b"/>
+    <input type="hidden" name="kj" value="#fafafa"/>
+    <input type="hidden" name="kt" value="p"/>
+    <img style="float:left;padding-right: 5px;" src="/img/ddg.ico" width="22px">
+    <input type="text" name="q" placeholder="Search this site..." aria-label="Search levlaz.org on DuckDuckGo"/>
+    <button type="submit">Search</button>
+</form>
+</div>
+    
+
+  </footer>
+</body>
+</html>
