@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<meta name="fediverse:creator" content="@levlaz@hachyderm.io">
+<title>Notes on Mastering Sublime Text | Lev Lazinskiy</title>
+
+      <link rel="stylesheet" href="/css/main.min.cda80e9eae3204fe10a59ea70553dfefd6d644cd217c61c5d1c329cdb374214e.css" integrity="sha256-zagOnq4yBP4QpZ6nBVPf79bWRM0hfGHF0cMpzbN0IU4=" crossorigin="anonymous">
+
+
+      <script src="/js/main.23cd0c7d837263b9eaeb96ee2d9ccfa2969daa3fa00fa1c1fe8701a9b87251a1.js" integrity="sha256-I80MfYNyY7nq65buLZzPopadqj&#43;gD6HB/ocBqbhyUaE=" crossorigin="anonymous"></script>
+
+<script defer data-domain="levlaz.org" src="https://analytics.levlaz.org/js/script.js"></script>
+
+
+</head>
+<body>
+  <div id="rainbow"></div>
+  <header>
+    <h1><a class="logo" href="/">Lev Lazinskiy</a></h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a style="margin-left:10px;" href="/about/">About</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" aria-current="true" class="ancestor" href="/archive/">Archive</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/tags/">Tags</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/now/">Now</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/links/">Links</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/index.xml">Feed</a>
+    </li>
+    </ul>
+  </nav>
+
+
+
+  </header>
+  <main>
+    
+<script defer page-type="blogpost" data-domain="levlaz.org" src="https://plausible.io/js/script.pageview-props.js"></script>
+<h2 style="margin-bottom:0">Notes on Mastering Sublime Text</h2>
+
+  <div style="color:grey">
+    
+    
+    <time datetime="2016-08-06T18:53:10-07:00">August 6, 2016</time> |  
+      <a href="/tags/tech/">tech</a> |
+      <a href="/tags/books/">books</a> |
+      <a href="/tags/programming/">programming</a> |
+
+  </div>
+
+  <p>I picked up Mastering Sublime Text while working through the first section of the <a href="https://levlaz.org/become-a-rails-developer/">Rails Series on Coursera</a>. First, its nice to sometimes switch up your text editors to see what you are missing. Second, Sublime Text has a very small learning curve and I never took the time to learn about some of the more advanced features so this was a decent use of my time. Third, I really want to write a CircleCI plugin for Sublime Text similar to the ones that exist for <a href="https://atom.io/packages/circle-ci">atom</a> and <a href="https://github.com/jvandyke/vscode-circleci">Visual Studio Code</a>, and this book has a great section that goes into detail about what it takes to write a plugin.</p>
+<h2>Things that I always loved about Sublime Text</h2>
+<ol>
+ 	<li>Multi-line Selection</li>
+ 	<li>Dead Simple Multi File Find and Replace</li>
+ 	<li>Speed -- Go try to open a 10K line log file in Atom. I'll wait.</li>
+ 	<li><a href="https://packagecontrol.io/">Package Control</a> package manager was one of the first of its class for GUI editors. Go try to install any plugin in Eclipse. I'll wait.</li>
+ 	<li>Distraction Free Mode -- Perfect for writing prose</li>
+</ol>
+<h2>Things that I wish Sublime Text had after using Atom</h2>
+<ol>
+ 	<li>Color coded indication about git status. There seems to be a<a href="https://github.com/kemayo/sublime-text-git/issues/204">feature request</a> for this, but I am not 100% sure of the reasoning on why this is so challenging to implement.</li>
+ 	<li><a href="https://github.com/DanBrooker/file-icons">File Type Icons</a>; I don't know why but this is one of my favorite atom plugins and it makes quickly finding the files that you are looking for a breeze.</li>
+ 	<li><a href="https://github.com/abe33/atom-pigments">Pigments plugin</a> - another one of my favorites. ST has a similar plugin but its not as good and it also underlines the font which can be a big hard to read.</li>
+ 	<li>Being able to drag and drop files around in the sidebar. This comes in handy quite a bit.</li>
+ 	<li>Better overall git support, I actually think that VS Code has some of the best git integration out there, followed by <a href="https://github.com/magit/magit">magit</a> and <a href="https://github.com/tpope/vim-fugitive">vim fugitive</a>.</li>
+</ol>
+<h2>Things I learned</h2>
+<h3>Searching</h3>
+<ol>
+ 	<li>Sublime text has incremental search. This was one of my favorite features of emacs. <code>Command + I</code> opens it up, and you can go to the next result by repeating <code>Command + I</code>.</li>
+ 	<li>When searching for stuff, if you double click on the result it takes you directly to the file. This is such an awesome feature.</li>
+ 	<li>Go to anything with <code>Command + P</code>, holy crap is this powerful.</li>
+</ol>
+<h3>Editing</h3>
+<ol>
+ 	<li>This did not come directly from the book, but I learned this cool trick while working on this post. If you highlight some words you can then wrap them in braces. This is super handy when adding links in markdown.</li>
+ 	<li><a href="https://packagecontrol.io/browse/labels/snippets">Snippets</a>; I have triggered snippets accidentally in the past, but learning more about how they work and how to make custom ones was very useful.</li>
+ 	<li><a href="https://github.com/sublimehq/Vintage">Vintage mode</a> makes sublime behave like vi. Pretty cool!</li>
+</ol>
+<h3>Plugins</h3>
+<ol>
+ 	<li><a href="https://sublimecodeintel.github.io/SublimeCodeIntel/">SublimeCodeIntel</a> - one of the best features of VS Code is<a href="https://code.visualstudio.com/docs/editor/editingevolved#_intellisense">IntelliSense</a>, this comes close and is a super powerful code-completion plugin.</li>
+ 	<li><a href="https://github.com/SublimeText/TrailingSpaces">TrailingSpaces</a> - Linus Torvalds tells developers who use any editor that does not automatically strip trailing white space to <a href="https://www.kernel.org/doc/Documentation/CodingStyle">get a real editor</a>. This is built into Sublime Text, but this plugin adds some additional features to make this even better.</li>
+</ol>
+<h3>Sublime Text Internals</h3>
+<ol>
+ 	<li>Sublime has a bunch of useful <a href="https://gist.github.com/danpe/6996806">Environment Variables</a> that can be used when developing snippets and plugins.</li>
+ 	<li>Visual Cues, I mentioned earlier that I really like some of the visual cues that Atom offers. There are a couple built in settings like making folders bold and highlighting modified tabs that make things easier to look at.</li>
+</ol>
+<h3>Testing</h3>
+<ol>
+ 	<li>The biggest difference between mode IDE's and Text Editors is build in testing and building functionality. Although testing is not built into Sublime Text, the book did an excellent job talking about several plugins that make testing PHP, Python, and Ruby a breeze. I found the <a href="https://github.com/maltize/sublime-text-2-ruby-tests">RubyTest</a> package to be the most useful since it has built in support for Test::Unit, Rspec, and Cucumber.</li>
+ 	<li>There are also a ton of great plugins for debugging from within Sublime Text.</li>
+</ol>
+<h3>Plugin Development</h3>
+<ol>
+ 	<li>This was my primary reason for getting this book since I want to write a <a href="https://github.com/levlaz/sublime-circleci">CircleCI Plugin</a> that shows the status of your most recent build in the window. I was not disappointed, the book did a great job discussing what it takes to start, develop, and publish a plugin.</li>
+</ol>
+<h2>Errata</h2>
+<ol>
+ 	<li><a href="https://www.sublimelinter.com/en/latest/">SublimeLinter</a>; the book mentions this plugin and says that it has a bunch of linters build in, this is no longer the case. It's still a very useful tool, it just requires a bit of configuration to get the most value out of it.</li>
+ 	<li>The book tells you to add <code>trim_trailing_white_space_on_save</code> to your user settings if you have installed the TrailingSpaces packages. This <a href="https://github.com/SublimeText/TrailingSpaces#about-sublime-texts-built-in-features">did not work</a> for me on Sublime Text 3. Instead I needed to add this setting under the <code>trailing_spaces.sublime-settings</code> file with the new key called<code>"trailing_spaces_trim_on_save"</code></li>
+</ol>
+<h2>Parting Thoughts</h2>
+Mastering Sublime Text is a quick read, full of useful information for new and experienced users of Sublime Text. I would highly recommend it for anyone who uses Sublime to serve as a deep dive introduction and as a handy reference manual.
+
+
+  <div class="more">
+    <p>
+        Thank you for reading! Share your thoughts with me 
+        on <a href="https://bsky.app/profile/levlaz.org"> bluesky</a>, <a href="https://hachyderm.io/@levlaz">mastodon</a>, or via 
+        <a id="email" href="mailto:lev@levlaz.org?subject=Re: your blog post">email</a>. 
+
+	<script>
+		document.getElementById('email').addEventListener('click', function(event) {
+			event.preventDefault();
+			var email = 'lev@levlaz.org';
+			var subject = encodeURIComponent(document.title);
+			var mailToLink = 'mailto:' + email + '?subject=Re: ' + subject;
+
+			window.location.href = mailToLink;
+		});
+	</script>
+    </p>
+    <p>
+        Check out some more stuff to read down below.
+    </p>
+        
+        <p>
+            <b>Most popular posts this month</b>
+        </p>
+        <ul>
+            
+            <li>
+                <a href="/2024/">2024 </a>
+            </li>
+            
+            <li>
+                <a href="/reinstalling-windows-at-1am/">Reinstalling Windows at 1am </a>
+            </li>
+            
+            <li>
+                <a href="/sqlite-db-migrations-with-pragma-user_version/">SQLite DB Migrations with PRAGMA user_version </a>
+            </li>
+            
+            <li>
+                <a href="/my-custom-miniflux-css-theme/">My Custom Miniflux CSS Theme </a>
+            </li>
+            
+            <li>
+                <a href="/how-to-disable-wayland-in-debian-testing/">How to Disable Wayland in Debian Testing </a>
+            </li>
+            
+        </ul>
+        
+        
+        <p><b>Recent Favorite Blog Posts</b></p>
+        <p> This is a collection of the last 8 posts that I bookmarked.</p>
+        <ul>
+            
+            <li>
+                <a href="https://theinternet.review/2025/01/03/25-years-of-the-mac-dock/">25 Years of the Mac OS Dock</a> from The Internet Review
+            </li>
+            
+            <li>
+                <a href="https://charity.wtf/2024/12/17/founder-mode-and-the-art-of-mythmaking/">“Founder Mode” and the Art of Mythmaking</a> from charity.wtf
+            </li>
+            
+            <li>
+                <a href="https://cacm.acm.org/blogcacm/the-rise-of-bluesky/">The Rise of Bluesky</a> from Communications of the ACM
+            </li>
+            
+            <li>
+                <a href="https://thecreativeindependent.com/people/podcaster-dj-and-writer-dj-louie-xiv-on-going-for-it-even-if-youre-terrified/">Podcaster, DJ, and writer DJ Louie XIV on going for it (even if you’re terrified)</a> from The Creative Independent
+            </li>
+            
+            <li>
+                <a href="https://rknight.me/blog/useful-bluesky-tools/">Useful Bluesky Tools</a> from Robb Knight • Posts • Atom Feed
+            </li>
+            
+            <li>
+                <a href="https://cdevroe.com/2024/11/18/re-bluesky/">Re: Bluesky</a> from Colin Devroe
+            </li>
+            
+            <li>
+                <a href="https://www.straphanger.blog/from-the-red-hell-to-the-sky-of-blue/">From the Red Hell to the Sky of Blue</a> from Straphanger
+            </li>
+            
+            <li>
+                <a href="https://sive.rs/salt">We don’t need to use what we make</a> from Derek Sivers blog
+            </li>
+            
+        </ul>
+        
+</div>
+
+  
+<section class="webring">
+  <h3>Articles from blogs I follow around the net</h3>
+  <section class="articles">
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://kevquirk.com/blog/aligning-automattic-s-sponsored-contributions-to-wordpress" target="_blank" rel="noopener">Aligning Automattic’s Sponsored Contributions to WordPress</a>
+      </h4>
+      <p class="summary" dir="auto">
+
+                  
+            
+              Aligning Automattic’s Sponsored Contributions to WordPress
+              by &#34;Automattic&#34; (let&#39;s be honest, it&#39;s Matt Mullenweg)
+              Automattic plan to fuck themselves over further (and by…</p>
+      <small class="source">
+        via <a href="https://kevquirk.com">Kev Quirk</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://www.theintrinsicperspective.com/p/stop-speedrunning-to-a-dystopia" target="_blank" rel="noopener">Stop speedrunning to a dystopia</a>
+      </h4>
+      <p class="summary" dir="auto">We need more warnings about amusing ourselves to death</p>
+      <small class="source">
+        via <a href="https://www.theintrinsicperspective.com">The Intrinsic Perspective</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://bradfrost.com/blog/post/durable-products/" target="_blank" rel="noopener">Durable products</a>
+      </h4>
+      <p class="summary" dir="auto">I wore my Olukai Mahana slippers all day every day for 3 years. They finally got beat up enough that when my family asked me what I wanted for Christmas, I said that I’d welcome a new pair of slippers. […]</p>
+      <small class="source">
+        via <a href="https://bradfrost.com">Blog – Brad Frost</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+  </section>
+  <p class="attribution">
+    Generated by
+    <a href="https://git.sr.ht/~sircmpwn/openring">openring</a>
+  </p>
+</section>
+<style>
+.webring .articles {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+}
+.webring .title {
+  margin: 0;
+}
+.webring .article {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background: #444;
+  min-width: 10rem;
+}
+.webring .summary {
+  font-size: 0.8rem;
+  flex: 1 1 0;
+}
+.webring .attribution {
+  text-align: right;
+  font-size: 0.8rem;
+  color: lightgray;
+}
+</style>
+
+
+  </main>
+  <footer>
+    <p>
+    <a href="mailto:lev@levlaz.org">lev@levlaz.org</a>
+    <br/>
+    <img alt="rss symbol" src="/img/rss.svg" height="10"><a href="/index.xml">rss</a>
+    <br/>
+    <a rel="me" target="_blank" href="https://hachyderm.io/@levlaz">mastodon</a>
+    <br/>
+    <a target="_blank" href="https://github.com/levlaz"> github </a>
+    <br />
+    <a href="/micro"> microblog </a>
+</p>
+
+<p>Having the best day of my life.</p>
+
+<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/">
+    <br>
+    <a property="dct:title" rel="cc:attributionURL" href="https://levlaz.org">levlaz.org</a> &copy; 2004-2025 by <span property="cc:attributionName">Lev Lazinskiy</span> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0</a>
+    <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt="">
+</p> 
+
+<div style="margin-bottom: 25px;">
+    <form method="get" id="ddgSearch" action="https://duckduckgo.com/">
+    <input type="hidden" name="sites" value="levlaz.org"/>
+    <input type="hidden" name="k7" value="#ffffff"/>
+    <input type="hidden" name="k8" value="#222222"/>
+    <input type="hidden" name="k9" value="#00278e"/>
+    <input type="hidden" name="kx" value="#20692b"/>
+    <input type="hidden" name="kj" value="#fafafa"/>
+    <input type="hidden" name="kt" value="p"/>
+    <img style="float:left;padding-right: 5px;" src="/img/ddg.ico" width="22px">
+    <input type="text" name="q" placeholder="Search this site..." aria-label="Search levlaz.org on DuckDuckGo"/>
+    <button type="submit">Search</button>
+</form>
+</div>
+    
+
+  </footer>
+</body>
+</html>

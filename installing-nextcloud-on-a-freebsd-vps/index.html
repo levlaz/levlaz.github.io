@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<meta name="fediverse:creator" content="@levlaz@hachyderm.io">
+<title>Installing Nextcloud on a FreeBSD VPS | Lev Lazinskiy</title>
+
+      <link rel="stylesheet" href="/css/main.min.cda80e9eae3204fe10a59ea70553dfefd6d644cd217c61c5d1c329cdb374214e.css" integrity="sha256-zagOnq4yBP4QpZ6nBVPf79bWRM0hfGHF0cMpzbN0IU4=" crossorigin="anonymous">
+
+
+      <script src="/js/main.23cd0c7d837263b9eaeb96ee2d9ccfa2969daa3fa00fa1c1fe8701a9b87251a1.js" integrity="sha256-I80MfYNyY7nq65buLZzPopadqj&#43;gD6HB/ocBqbhyUaE=" crossorigin="anonymous"></script>
+
+<script defer data-domain="levlaz.org" src="https://analytics.levlaz.org/js/script.js"></script>
+
+
+</head>
+<body>
+  <div id="rainbow"></div>
+  <header>
+    <h1><a class="logo" href="/">Lev Lazinskiy</a></h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a style="margin-left:10px;" href="/about/">About</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" aria-current="true" class="ancestor" href="/archive/">Archive</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/tags/">Tags</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/now/">Now</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/links/">Links</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/index.xml">Feed</a>
+    </li>
+    </ul>
+  </nav>
+
+
+
+  </header>
+  <main>
+    
+<script defer page-type="blogpost" data-domain="levlaz.org" src="https://plausible.io/js/script.pageview-props.js"></script>
+<h2 style="margin-bottom:0">Installing Nextcloud on a FreeBSD VPS</h2>
+
+  <div style="color:grey">
+    
+    
+    <time datetime="2016-09-01T18:44:00-07:00">September 1, 2016</time> |  
+      <a href="/tags/bsd/">bsd</a> |
+      <a href="/tags/software/">software</a> |
+      <a href="/tags/foss/">foss</a> |
+
+  </div>
+
+  <h2>Introduction</h2>
+<a href="https://nextcloud.com/">Nextcloud</a> is an exciting new fork of OwnCloud. I have been meaning to try it out lately and I finally got around to doing it. I picked <a href="https://www.vultr.com/?ref=6825835">Vultr</a>{.add-link} for this instance since they have really affordable "Spinny Disk" instances starting at just \$5/mo for 125GB. The performance is noticeably slower than SSD, but if you are looking for a low cost place to store all of your files then this deal cannot be beat. Vultr also comes with full support for FreeBSD out of the box, which is a great choice for a system like this. The <a href="https://docs.nextcloud.com/server/10/admin_manual/installation/index.html">official Nextcloud documentation</a> is wonderful, however it seems like it geared toward large multi-user installs. The purpose of this guide is to make it easy to install Nextcloud for a single (or just a few) user system. If you follow this guide you will have the latest stable version of Nextcloud with PHP7, Apache 2.4, MySQL 5.7 and Redis secured with LetsEncrypt on the latest stable version of FreeBSD.
+<h2>Pre Requisites</h2>
+In order to complete this guide successfully with a TLS enabled Nextcloud site you <em>must</em> have a domain name with DNS that successfully resolves to the IP address of your VPS Server.
+<h2>Configuration Steps</h2>
+<ol>
+ 	<li>Launch a new Storage Instance in the DC of your choice. In my specific case I am running a 512MB RAM/125GB HD instance in the Los Angeles Data Center.</li>
+ 	<li>SSH into the new VPS.</li>
+ 	<li>Update and Upgrade BSD
+<div class="codehilite">
+<pre>pkg update &amp;&amp; pkg upgrade
+<h1 id="optional-install-some-helper-packages">
+  [Optional] Install some helper packages
+  <a href="#optional-install-some-helper-packages">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>pkg install vim-lite htop tmux
+</pre></p>
+</div></li>
+ 	<li>Add some swap By default, the storage instance does not come with a swap partition, since I chose the smallest instance with 512MB of RAM, it is probably a good idea to add some swap because if the system ever runs out of memory the whole entire thing will come crashing down. You can read more about <a href="https://www.freebsd.org/doc/handbook/adding-swap-space.html">how to add swap in FreeBSD</a>, but the gist of it is:
+<div class="codehilite">
+<pre># Create a 1GB sawp file
+dd if=/dev/zero of=/swap bs=1m count=1024
+<h1 id="set-proper-permissions-on-swap-file">
+  Set proper permissions on swap file
+  <a href="#set-proper-permissions-on-swap-file">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>chmod 600 /swap</p>
+<h1 id="add-swap-to-etcfstab">
+  Add swap to /etc/fstab
+  <a href="#add-swap-to-etcfstab">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>md99    none    swap    sw,file=/swap,late  0   0</p>
+<h1 id="turn-swap-on">
+  Turn swap on
+  <a href="#turn-swap-on">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>swapon -aL
+</pre></p>
+</div>
+If everything was successful, running htop you should now see some swap space.</li>
+ 	<li>Install and Configure BAMP Stack (BSD, Apache, MySQL, PHP) and Redis
+<ul>
+ 	<li>Install all packages and dependencies
+<div class="codehilite">
+<pre>pkg install apache24 mysql57-server redis php70 mod_php70 php70-pdo_mysql \
+php70-redis php70-gd php70-curl php70-json php70-zip php70-dom \
+php70-xmlwriter php70-xmlreader php70-xml php70-mbstring php70-ctype \
+php70-zlib php70-simplexml php70-hash php70-fileinfo php70-posix \
+php70-iconv php70-filter php70-openssl
+</pre>
+</div></li>
+ 	<li>Add Services to <code>/etc/rc.conf</code>
+<div class="codehilite">
+<pre># /etc/rc.conf
+<p>&hellip;
+apache24_enable=&ldquo;yes&rdquo;
+mysql_enable=&ldquo;yes&rdquo;
+redis_enable=&ldquo;yes&rdquo;
+</pre></p>
+</div></li>
+ 	<li>Configure Apache Ensure that the rewrite and ssl modules are enabled (uncommented) in <code>/usr/local/etc/apache24/httpd.conf</code>.
+<div class="codehilite">
+<pre># /usr/local/etc/apache24/httpd.conf
+<p>&hellip;</p>
+<p>LoadModule ssl_module libexec/apache24/mod_ssl.so
+LoadModule rewrite_module libexec/apache24/mod_rewrite.so</p>
+<p>&hellip;
+</pre></p>
+</div>
+Add a PHP handler to <code>/usr/local/etc/apache24/modules.d</code>
+<div class="codehilite">
+<pre># /usr/local/etc/apache24/modules.d/001_mod_php.conf
+<p><span class="nt">&lt;FilesMatch</span> <span class="err">&quot;.php$&quot;</span><span class="nt">&gt;</span>
+SetHandler application/x-httpd-php
+<span class="nt">&lt;/FilesMatch&gt;</span>
+<span class="nt">&lt;FilesMatch</span> <span class="err">&quot;.phps$&quot;</span><span class="nt">&gt;</span>
+SetHandler application/x-httpd-php-source
+<span class="nt">&lt;/FilesMatch&gt;</span>
+</pre></p>
+</div></li>
+ 	<li>Configure MySQL Once MySQL has been added to <code>/etc/rc.conf</code> you can start it up by executing the following command in your shell:
+<div class="codehilite">
+<pre>/usr/local/etc/rc.d/mysql-server start
+</pre>
+</div>
+The first time MySQL runs it will create a root password which can be found in <code>$HOME/.mysql_secret</code>, use this password to log into MySQL, change the root password, and then create a new admin user for Nextcloud.
+<div class="codehilite">
+<pre># Grab the Root Password
+cat ~/.mysql-secret
+<h1 id="log-into-mysql">
+  Log into MySQL
+  <a href="#log-into-mysql">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>mysql -u root -p $PASSWORD # Password from previous step</p>
+<h1 id="change-the-root-password">
+  Change the Root Password
+  <a href="#change-the-root-password">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>ALTER USER &lsquo;root&rsquo;@&rsquo;localhost&rsquo; IDENTIFIED BY &lsquo;$NEW_PASSWORD&rsquo;;</p>
+<h1 id="create-new-schema-for-nextcloud">
+  Create New Schema for Nextcloud
+  <a href="#create-new-schema-for-nextcloud">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>CREATE DATABASE nextcloud;</p>
+<h1 id="create-new-admin-user-for-nextcloud">
+  Create New Admin User for Nextcloud
+  <a href="#create-new-admin-user-for-nextcloud">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>CREATE USER &rsquo;nextcloud_admin&rsquo;@&rsquo;localhost&rsquo; IDENTIFIED BY &lsquo;$OTHER_NEW_PASSWORD&rsquo;;</p>
+<h1 id="grant-permissions-to-the-new-admin-user-to-the-nextcloud-schema">
+  Grant Permissions to the new Admin user to the Nextcloud Schema
+  <a href="#grant-permissions-to-the-new-admin-user-to-the-nextcloud-schema">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>GRANT ALL ON nextcloud.* TO &rsquo;nextcloud_admin&rsquo;@&rsquo;localhost&rsquo;;</p>
+<h1 id="refresh-all-privileges">
+  Refresh all Privileges
+  <a href="#refresh-all-privileges">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>FLUSH PRIVILEGES;
+</pre></p>
+</div></li>
+ 	<li>Configure Redis There are many different <a href="https://docs.nextcloud.com/server/10/admin_manual/configuration_server/caching_configuration.html">memory caching strategies for Nextcloud</a>. I like using <a href="https://redis.io/">Redis</a> for this sort of thing, you can chose whichever strategy you prefer. The following (optional) configuration will make redis run on a local socket instead of over TCP. This is better from a security perspective. Update <code>/usr/local/etc/redis.conf</code> to run on local socket
+<div class="codehilite">
+<pre># /usr/local/etc/redis.conf
+<p>&hellip;</p>
+<p>port 0
+&hellip;</p>
+<p>unixsocket /tmp/redis.sock
+unixsocketperm 750
+</pre></p>
+</div>
+Add <code>www</code> user to the <code>wheel</code> group so that it has permission to access this socket.
+<div class="codehilite">
+<pre>pw groupmod wheel -m www
+</pre>
+</div>
+Start Redis
+<div class="codehilite">
+<pre>/usr/local/etc/rc.d/redis start
+</pre>
+</div>
+If everything went well, you should see the redis socket in<code>/tmp</code>
+<div class="codehilite">
+<pre># ls -al /tmp
+total 48
+drwxrwxrwt   7 root   wheel  512 Sep  1 23:02 .
+drwxr-xr-x  18 root   wheel  512 Sep  1 22:03 ..
+<p>&hellip;</p>
+<p>srwxr-x&mdash;   1 redis  wheel    0 Sep  1 23:02 redis.sock</p>
+<p>&hellip;
+</pre></p>
+</div></li>
+</ul>
+</li>
+ 	<li>Download Nextcloud We are almost there! The last few steps are to actually download and configure Nextcloud. You can get the <a href="https://nextcloud.com/install/">latest version of Nextcloud from here</a>.
+<div class="codehilite">
+<pre># Go to the default apache data directory
+cd /usr/local/www/apache24/data
+<h1 id="download-nextcloud">
+  Download Nextcloud
+  <a href="#download-nextcloud">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>wget <a href="https://download.nextcloud.com/server/releases/nextcloud-10.0.0.zip">https://download.nextcloud.com/server/releases/nextcloud-10.0.0.zip</a></p>
+<h1 id="unzip-nextcloud">
+  Unzip Nextcloud
+  <a href="#unzip-nextcloud">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>unzip nextcloud-10.0.0.zip</p>
+<h1 id="make-sure-the-www-user-owns-this-directory">
+  Make sure the www user owns this directory
+  <a href="#make-sure-the-www-user-owns-this-directory">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>chown -R www:www nextcloud
+</pre></p>
+</div></li>
+ 	<li>Install and run <a href="https://certbot.eff.org/">certbot by LetsEncrypt</a> The full instructions are available <a href="https://certbot.eff.org/#freebsd-apache">here</a> but the gist is:
+<div class="codehilite">
+<pre># Install the Package
+pkg install py27-certbot
+<h1 id="generate-the-cert">
+  Generate the Cert
+  <a href="#generate-the-cert">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>certbot certonly
+</pre></p>
+</div>
+Go through the certbot UI and fill out your site specific details. If all goes well you should see a message that says:
+<blockquote>Congratulations! Your certificate and chain have been saved at<code>/usr/local/etc/letsencrypt/live/$YOUR_SITE/fullchain.pem</code></blockquote>
+</li>
+ 	<li>Create a VirtualHost Configuration for Nextcloud Create a new file called <code>$YOUR_SITE.conf</code> in <code>/usr/local/etc/apache24/Includes</code>, the contents of this file should have a VirtualHost specification for your new Nextcloud site. The first VirtualHost will listen on port 80 and redirect all requests to HTTPS. The second VirtualHost will listen on port 443 and serve your actual Nextcloud site.
+<div class="codehilite">
+<pre><span class="nt">&lt;VirtualHost</span> <span class="err">*:80</span><span class="nt">&gt;</span>
+  ServerAdmin $YOUR_EMAIL
+  ServerName $YOUR_SITE
+<p>RewriteEngine on
+RewriteCond %{SERVER_NAME} =$YOUR_SITE
+RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,QSA,R=permanent]
+<span class="nt">&lt;/VirtualHost&gt;</span></p>
+<p>Listen 443</p>
+<p><span class="nt">&lt;IfModule</span> <span class="err">mod_ssl.c</span><span class="nt">&gt;</span>
+<span class="nt">&lt;VirtualHost</span> <span class="err">*:443</span><span class="nt">&gt;</span>
+ServerAdmin $YOUR_EMAIL
+ServerName $YOUR_SITE</p>
+<pre><code>DirectoryIndex index.php
+DocumentRoot /usr/local/www/apache24/data/nextcloud
+SSLCertificateFile /usr/local/etc/letsencrypt/live/$YOUR_SITE/fullchain.pem
+SSLCertificateKeyFile /usr/local/etc/letsencrypt/live/$YOUR_SITE/privkey.pem
+
+SSLEngine on
+
+# Intermediate configuration, tweak to your needs
+SSLProtocol             all -SSLv2 -SSLv3
+SSLCipherSuite          ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA
+SSLHonorCipherOrder     on
+SSLCompression          off
+
+SSLOptions +StrictRequire
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;Directory&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;/usr/local/www/apache24/data/nextcloud&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  AllowOverride all
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/Directory&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;IfModule&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;mod_headers.c&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  Header always set Strict-Transport-Security &quot;max-age=15552000; includeSubDomains&quot;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/IfModule&amp;gt;&lt;/span&gt;
+</code></pre>
+<p><span class="nt">&lt;/VirtualHost&gt;</span>
+<span class="nt">&lt;/IfModule&gt;</span>
+</pre></p>
+</div>
+Start apache with <code>/usr/local/etc/rc.d/apache24 start</code></li>
+ 	<li>Configure Nextcloud
+<ul>
+ 	<li>Verify Installation Go to https://\$YOUR_SITE.com, verify that you get redirected to HTTPS and that the certificate shows up as valid.</li>
+ 	<li>Create Admin Account If this page loads properly, you should create an admin user, set the data directory location, and fill in the database credentials from step 5.</li>
+ 	<li>Tweak Config File We need to tweak the config file in order to enable Redis memory caching. Open up<code>/usr/local/www/apache24/data/nextcloud/config/config.php</code> and add:
+<div class="codehilite">
+<pre># /usr/local/www/apache24/data/nextcloud/config/config.php
+<p>&hellip;</p>
+<p>&lsquo;memcache.locking&rsquo; =&gt; &lsquo;\OC\Memcache\Redis&rsquo;,
+&lsquo;memcache.local&rsquo; =&gt; &lsquo;\OC\Memcache\Redis&rsquo;,
+&lsquo;redis&rsquo; =&gt;
+array (
+&lsquo;host&rsquo; =&gt; &lsquo;/tmp/redis.sock&rsquo;,
+&lsquo;port&rsquo; =&gt; 0,
+),
+</pre></p>
+</div></li>
+ 	<li>Use System Cron Job By default NextCloud uses an AJAX cron, the performance is a bit better if you let the system cron handle this. Add the following to the crontab:
+<div class="codehilite">
+<pre># crontab -u www-data -e
+PATH=/usr/local/bin
+*/15  *  *  *  * php -f /usr/local/www/apache24/data/nextcloud/cron.php
+</pre>
+</div>
+Once this has been added, select <strong>Cron</strong> from Admin -&gt; Settings</li>
+ 	<li>Enjoy Nextcloud That was a lot of steps, but now we have a private, self hosted, secure, and affordable Nextcloud instance. If you ran into any issues during installation please let me know in the comments below!</li>
+</ul>
+</li>
+</ol>
+<h2>Next Steps</h2>
+<ul>
+ 	<li>Download the <a href="https://nextcloud.com/install/#install-clients">Nextcloud client</a> for your Desktop or Mobile Device.</li>
+ 	<li>Explore the Apps, my favorites are:
+<ul>
+ 	<li>Mail</li>
+ 	<li>News</li>
+ 	<li>Tasks</li>
+</ul>
+</li>
+ 	<li>Join the <a href="https://help.nextcloud.com/">Nextcloud Community</a></li>
+ 	<li><a href="https://github.com/nextcloud">Hack on Nextcloud</a></li>
+</ul>
+
+
+  <div class="more">
+    <p>
+        Thank you for reading! Share your thoughts with me 
+        on <a href="https://bsky.app/profile/levlaz.org"> bluesky</a>, <a href="https://hachyderm.io/@levlaz">mastodon</a>, or via 
+        <a id="email" href="mailto:lev@levlaz.org?subject=Re: your blog post">email</a>. 
+
+	<script>
+		document.getElementById('email').addEventListener('click', function(event) {
+			event.preventDefault();
+			var email = 'lev@levlaz.org';
+			var subject = encodeURIComponent(document.title);
+			var mailToLink = 'mailto:' + email + '?subject=Re: ' + subject;
+
+			window.location.href = mailToLink;
+		});
+	</script>
+    </p>
+    <p>
+        Check out some more stuff to read down below.
+    </p>
+        
+        <p>
+            <b>Most popular posts this month</b>
+        </p>
+        <ul>
+            
+            <li>
+                <a href="/2024/">2024 </a>
+            </li>
+            
+            <li>
+                <a href="/reinstalling-windows-at-1am/">Reinstalling Windows at 1am </a>
+            </li>
+            
+            <li>
+                <a href="/sqlite-db-migrations-with-pragma-user_version/">SQLite DB Migrations with PRAGMA user_version </a>
+            </li>
+            
+            <li>
+                <a href="/my-custom-miniflux-css-theme/">My Custom Miniflux CSS Theme </a>
+            </li>
+            
+            <li>
+                <a href="/how-to-disable-wayland-in-debian-testing/">How to Disable Wayland in Debian Testing </a>
+            </li>
+            
+        </ul>
+        
+        
+        <p><b>Recent Favorite Blog Posts</b></p>
+        <p> This is a collection of the last 8 posts that I bookmarked.</p>
+        <ul>
+            
+            <li>
+                <a href="https://theinternet.review/2025/01/03/25-years-of-the-mac-dock/">25 Years of the Mac OS Dock</a> from The Internet Review
+            </li>
+            
+            <li>
+                <a href="https://charity.wtf/2024/12/17/founder-mode-and-the-art-of-mythmaking/">“Founder Mode” and the Art of Mythmaking</a> from charity.wtf
+            </li>
+            
+            <li>
+                <a href="https://cacm.acm.org/blogcacm/the-rise-of-bluesky/">The Rise of Bluesky</a> from Communications of the ACM
+            </li>
+            
+            <li>
+                <a href="https://thecreativeindependent.com/people/podcaster-dj-and-writer-dj-louie-xiv-on-going-for-it-even-if-youre-terrified/">Podcaster, DJ, and writer DJ Louie XIV on going for it (even if you’re terrified)</a> from The Creative Independent
+            </li>
+            
+            <li>
+                <a href="https://rknight.me/blog/useful-bluesky-tools/">Useful Bluesky Tools</a> from Robb Knight • Posts • Atom Feed
+            </li>
+            
+            <li>
+                <a href="https://cdevroe.com/2024/11/18/re-bluesky/">Re: Bluesky</a> from Colin Devroe
+            </li>
+            
+            <li>
+                <a href="https://www.straphanger.blog/from-the-red-hell-to-the-sky-of-blue/">From the Red Hell to the Sky of Blue</a> from Straphanger
+            </li>
+            
+            <li>
+                <a href="https://sive.rs/salt">We don’t need to use what we make</a> from Derek Sivers blog
+            </li>
+            
+        </ul>
+        
+</div>
+
+  
+<section class="webring">
+  <h3>Articles from blogs I follow around the net</h3>
+  <section class="articles">
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://kevquirk.com/blog/aligning-automattic-s-sponsored-contributions-to-wordpress" target="_blank" rel="noopener">Aligning Automattic’s Sponsored Contributions to WordPress</a>
+      </h4>
+      <p class="summary" dir="auto">
+
+                  
+            
+              Aligning Automattic’s Sponsored Contributions to WordPress
+              by &#34;Automattic&#34; (let&#39;s be honest, it&#39;s Matt Mullenweg)
+              Automattic plan to fuck themselves over further (and by…</p>
+      <small class="source">
+        via <a href="https://kevquirk.com">Kev Quirk</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://www.theintrinsicperspective.com/p/stop-speedrunning-to-a-dystopia" target="_blank" rel="noopener">Stop speedrunning to a dystopia</a>
+      </h4>
+      <p class="summary" dir="auto">We need more warnings about amusing ourselves to death</p>
+      <small class="source">
+        via <a href="https://www.theintrinsicperspective.com">The Intrinsic Perspective</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://bradfrost.com/blog/post/durable-products/" target="_blank" rel="noopener">Durable products</a>
+      </h4>
+      <p class="summary" dir="auto">I wore my Olukai Mahana slippers all day every day for 3 years. They finally got beat up enough that when my family asked me what I wanted for Christmas, I said that I’d welcome a new pair of slippers. […]</p>
+      <small class="source">
+        via <a href="https://bradfrost.com">Blog – Brad Frost</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+  </section>
+  <p class="attribution">
+    Generated by
+    <a href="https://git.sr.ht/~sircmpwn/openring">openring</a>
+  </p>
+</section>
+<style>
+.webring .articles {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+}
+.webring .title {
+  margin: 0;
+}
+.webring .article {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background: #444;
+  min-width: 10rem;
+}
+.webring .summary {
+  font-size: 0.8rem;
+  flex: 1 1 0;
+}
+.webring .attribution {
+  text-align: right;
+  font-size: 0.8rem;
+  color: lightgray;
+}
+</style>
+
+
+  </main>
+  <footer>
+    <p>
+    <a href="mailto:lev@levlaz.org">lev@levlaz.org</a>
+    <br/>
+    <img alt="rss symbol" src="/img/rss.svg" height="10"><a href="/index.xml">rss</a>
+    <br/>
+    <a rel="me" target="_blank" href="https://hachyderm.io/@levlaz">mastodon</a>
+    <br/>
+    <a target="_blank" href="https://github.com/levlaz"> github </a>
+    <br />
+    <a href="/micro"> microblog </a>
+</p>
+
+<p>Having the best day of my life.</p>
+
+<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/">
+    <br>
+    <a property="dct:title" rel="cc:attributionURL" href="https://levlaz.org">levlaz.org</a> &copy; 2004-2025 by <span property="cc:attributionName">Lev Lazinskiy</span> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0</a>
+    <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt="">
+</p> 
+
+<div style="margin-bottom: 25px;">
+    <form method="get" id="ddgSearch" action="https://duckduckgo.com/">
+    <input type="hidden" name="sites" value="levlaz.org"/>
+    <input type="hidden" name="k7" value="#ffffff"/>
+    <input type="hidden" name="k8" value="#222222"/>
+    <input type="hidden" name="k9" value="#00278e"/>
+    <input type="hidden" name="kx" value="#20692b"/>
+    <input type="hidden" name="kj" value="#fafafa"/>
+    <input type="hidden" name="kt" value="p"/>
+    <img style="float:left;padding-right: 5px;" src="/img/ddg.ico" width="22px">
+    <input type="text" name="q" placeholder="Search this site..." aria-label="Search levlaz.org on DuckDuckGo"/>
+    <button type="submit">Search</button>
+</form>
+</div>
+    
+
+  </footer>
+</body>
+</html>

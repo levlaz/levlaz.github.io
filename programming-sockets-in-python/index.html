@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<meta name="fediverse:creator" content="@levlaz@hachyderm.io">
+<title>Programming Sockets in Python | Lev Lazinskiy</title>
+
+      <link rel="stylesheet" href="/css/main.min.cda80e9eae3204fe10a59ea70553dfefd6d644cd217c61c5d1c329cdb374214e.css" integrity="sha256-zagOnq4yBP4QpZ6nBVPf79bWRM0hfGHF0cMpzbN0IU4=" crossorigin="anonymous">
+
+
+      <script src="/js/main.23cd0c7d837263b9eaeb96ee2d9ccfa2969daa3fa00fa1c1fe8701a9b87251a1.js" integrity="sha256-I80MfYNyY7nq65buLZzPopadqj&#43;gD6HB/ocBqbhyUaE=" crossorigin="anonymous"></script>
+
+<script defer data-domain="levlaz.org" src="https://analytics.levlaz.org/js/script.js"></script>
+
+
+</head>
+<body>
+  <div id="rainbow"></div>
+  <header>
+    <h1><a class="logo" href="/">Lev Lazinskiy</a></h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a style="margin-left:10px;" href="/about/">About</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" aria-current="true" class="ancestor" href="/archive/">Archive</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/tags/">Tags</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/now/">Now</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/links/">Links</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/index.xml">Feed</a>
+    </li>
+    </ul>
+  </nav>
+
+
+
+  </header>
+  <main>
+    
+<script defer page-type="blogpost" data-domain="levlaz.org" src="https://plausible.io/js/script.pageview-props.js"></script>
+<h2 style="margin-bottom:0">Programming Sockets in Python</h2>
+
+  <div style="color:grey">
+    
+    
+    <time datetime="2015-01-25T17:44:09-08:00">January 25, 2015</time> |  
+      <a href="/tags/programming/">programming</a> |
+      <a href="/tags/python/">python</a> |
+
+  </div>
+
+  <p><strong>EDIT:</strong> <em>I am sorry for derping out of control. When I initially published this post it was called “Programming Web Sockets in Python”, this is just flat out wrong. What we are making here is just a regular socket. <a href="https://en.wikipedia.org/wiki/WebSocket">Web Sockets</a> and regular sockets are similar but are certainly not the same thing. I hope you will still find this useful!</em> Sockets are pretty much the basis of how applications work on the Internet. Python makes it super easy to get started programming sockets. In this brief introduction we will create a simple server that greets the user when it receives incoming requests from the client application. Due to my recent obsession with Linux Containers we will also be implementing this inside of two containers. Containers make it really simple to simulate a network because you can create additional hosts in seconds.</p>
+<h1>Creating your Containers</h1>
+I am running Ubuntu 14.04. So creating two additional containers can be achieved by running the following as the root user.
+<div class="codehilite">
+<pre>lxc-create -t download -n pyServer 
+<h1 id="choose-ubuntu-trusty-amd64-when-prompted">
+  Choose ubuntu, trusty, amd64 when prompted
+  <a href="#choose-ubuntu-trusty-amd64-when-prompted">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<h1 id="then-clone-the-first-container">
+  Then clone the first container
+  <a href="#then-clone-the-first-container">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>lxc-clone -o pyServer -n pyClient
+</pre></p>
+</div>
+<h1>Running the Server</h1>
+Now that we have created our containers lets jump into our server container and fire up our simple server application. We can start up the container by issuing the following command as root: <code>lxc-start -n pyServer -d</code>, this will start the container as a daemon. Let’s go ahead and get into by attaching the container. I like to do this inside of screen so that we can easily get in and out of the container. Create a screen session <code>screen -dRR pyServer</code> and once inside the screen attach the container <code>lxc-attach -n pyServer</code> Once we are inside the container we need to install python and launch our simple server.
+<div class="codehilite">
+<pre>apt-get install python vim pyServer.py
+</pre>
+</div>
+Inside of vim (or your favorite text editor) we need to enter the following simple python code.
+<div class="codehilite">
+<pre><span class="kn">from</span> <span class="nn">socket</span> <span class="kn">import</span> <span class="o">*</span>  
+<p><span class="n">serverPort</span> <span class="o">=</span> <span class="mi">12000</span><br>
+<span class="n">serverSocket</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">SOCK_DGRAM</span><span class="p">)</span><br>
+<span class="n">serverSocket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s1">&rsquo;&rsquo;</span><span class="p">,</span> <span class="n">serverPort</span><span class="p">))</span><br>
+<span class="k">print</span> <span class="s2">&ldquo;The server is ready to rock and roll!&quot;</span></p>
+<p><span class="k">while</span> <span class="mi">1</span><span class="p">:</span>  <br>
+<span class="n">    name</span><span class="p">,</span> <span class="n">clientAddress</span> <span class="o">=</span> <span class="n">serverSocket</span><span class="o">.</span><span class="n">recvfrom</span><span class="p">(</span><span class="mi">2048</span><span class="p">)</span>  <br>
+<span class="n">    response</span> <span class="o">=</span> <span class="s2">&ldquo;Hello &ldquo;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&rdquo;! You are really good at socket programming&rdquo;</span>  <br>
+<span class="n">    serverSocket</span><span class="o">.</span><span class="n">sendto</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">clientAddress</span><span class="p">)</span>
+</pre></p>
+</div>
+The code should be pretty straightforward. We are creating a new serverSocket that is bound to port 12000. When it receives requests (which include a name) it responds with an encouraging message. Fire up this server by running <code>python pyServer.py</code> if all goes well you should see a message that states <em>This server is ready to rock and roll!</em> Exit the container (and the screen session) by pressing Ctrl+a and Ctrl+d
+<h1>Running the Client</h1>
+Now that we have our server up and running, lets get our client working as well. Before we move forward, lets grab the IP address of our server container because we will need it soon. You can get the IP by running<code>lxc-ls --fancy</code>. Launch the client container, attach it in screen, and install python in the same way that we did previously.
+<div class="codehilite">
+<pre>lxc-start -n pyClient -d screen -dRR pyClient 
+lxc-attach -n pyClient 
+apt-get install python 
+vim pyClient.py
+</pre>
+</div>
+In vim, lets create the pyClient.py program by entering the following code.
+<div class="codehilite">
+<pre><span class="kn">from</span> <span class="nn">socket</span> <span class="kn">import</span> <span class="o">*</span>  
+<p><span class="c1"># Replace the IP address in serverName with the IP of your container that you grabbed previously.</p>
+<p>serverName = &lsquo;10.0.3.211&rsquo;
+serverPort = 12000
+clientSocket = socket(AF_INET, SOCK_DGRAM)<br>
+name = raw_input(&lsquo;Please enter your name:&rsquo;)<br>
+clientSocket.sendto(name, (serverName, serverPort))</p>
+<p>response, serverAddress = clientSocket.recvfrom(2048)
+print response
+clientSocket.close()</span>
+</pre></p>
+</div>
+This code is also pretty straightforward. It asks the user for their name, sends it to the server, and prints the response. You can try this out now! Save the file and execute your python program by running<code>python pyClient.py</code>. After entering your name and pressing enter you should see a response from your server with the encouraging message. This was a pretty trivial exercise, but we can quickly see that we can expand upon this basic code to create much more interesting and complex applications. We can also leverage the power and simplicity of LXC to create a simulated large network for distributed applications.
+
+
+  <div class="more">
+    <p>
+        Thank you for reading! Share your thoughts with me 
+        on <a href="https://bsky.app/profile/levlaz.org"> bluesky</a>, <a href="https://hachyderm.io/@levlaz">mastodon</a>, or via 
+        <a id="email" href="mailto:lev@levlaz.org?subject=Re: your blog post">email</a>. 
+
+	<script>
+		document.getElementById('email').addEventListener('click', function(event) {
+			event.preventDefault();
+			var email = 'lev@levlaz.org';
+			var subject = encodeURIComponent(document.title);
+			var mailToLink = 'mailto:' + email + '?subject=Re: ' + subject;
+
+			window.location.href = mailToLink;
+		});
+	</script>
+    </p>
+    <p>
+        Check out some more stuff to read down below.
+    </p>
+        
+        <p>
+            <b>Most popular posts this month</b>
+        </p>
+        <ul>
+            
+            <li>
+                <a href="/2024/">2024 </a>
+            </li>
+            
+            <li>
+                <a href="/reinstalling-windows-at-1am/">Reinstalling Windows at 1am </a>
+            </li>
+            
+            <li>
+                <a href="/sqlite-db-migrations-with-pragma-user_version/">SQLite DB Migrations with PRAGMA user_version </a>
+            </li>
+            
+            <li>
+                <a href="/my-custom-miniflux-css-theme/">My Custom Miniflux CSS Theme </a>
+            </li>
+            
+            <li>
+                <a href="/how-to-disable-wayland-in-debian-testing/">How to Disable Wayland in Debian Testing </a>
+            </li>
+            
+        </ul>
+        
+        
+        <p><b>Recent Favorite Blog Posts</b></p>
+        <p> This is a collection of the last 8 posts that I bookmarked.</p>
+        <ul>
+            
+            <li>
+                <a href="https://theinternet.review/2025/01/03/25-years-of-the-mac-dock/">25 Years of the Mac OS Dock</a> from The Internet Review
+            </li>
+            
+            <li>
+                <a href="https://charity.wtf/2024/12/17/founder-mode-and-the-art-of-mythmaking/">“Founder Mode” and the Art of Mythmaking</a> from charity.wtf
+            </li>
+            
+            <li>
+                <a href="https://cacm.acm.org/blogcacm/the-rise-of-bluesky/">The Rise of Bluesky</a> from Communications of the ACM
+            </li>
+            
+            <li>
+                <a href="https://thecreativeindependent.com/people/podcaster-dj-and-writer-dj-louie-xiv-on-going-for-it-even-if-youre-terrified/">Podcaster, DJ, and writer DJ Louie XIV on going for it (even if you’re terrified)</a> from The Creative Independent
+            </li>
+            
+            <li>
+                <a href="https://rknight.me/blog/useful-bluesky-tools/">Useful Bluesky Tools</a> from Robb Knight • Posts • Atom Feed
+            </li>
+            
+            <li>
+                <a href="https://cdevroe.com/2024/11/18/re-bluesky/">Re: Bluesky</a> from Colin Devroe
+            </li>
+            
+            <li>
+                <a href="https://www.straphanger.blog/from-the-red-hell-to-the-sky-of-blue/">From the Red Hell to the Sky of Blue</a> from Straphanger
+            </li>
+            
+            <li>
+                <a href="https://sive.rs/salt">We don’t need to use what we make</a> from Derek Sivers blog
+            </li>
+            
+        </ul>
+        
+</div>
+
+  
+<section class="webring">
+  <h3>Articles from blogs I follow around the net</h3>
+  <section class="articles">
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://kevquirk.com/blog/aligning-automattic-s-sponsored-contributions-to-wordpress" target="_blank" rel="noopener">Aligning Automattic’s Sponsored Contributions to WordPress</a>
+      </h4>
+      <p class="summary" dir="auto">
+
+                  
+            
+              Aligning Automattic’s Sponsored Contributions to WordPress
+              by &#34;Automattic&#34; (let&#39;s be honest, it&#39;s Matt Mullenweg)
+              Automattic plan to fuck themselves over further (and by…</p>
+      <small class="source">
+        via <a href="https://kevquirk.com">Kev Quirk</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://www.theintrinsicperspective.com/p/stop-speedrunning-to-a-dystopia" target="_blank" rel="noopener">Stop speedrunning to a dystopia</a>
+      </h4>
+      <p class="summary" dir="auto">We need more warnings about amusing ourselves to death</p>
+      <small class="source">
+        via <a href="https://www.theintrinsicperspective.com">The Intrinsic Perspective</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://bradfrost.com/blog/post/durable-products/" target="_blank" rel="noopener">Durable products</a>
+      </h4>
+      <p class="summary" dir="auto">I wore my Olukai Mahana slippers all day every day for 3 years. They finally got beat up enough that when my family asked me what I wanted for Christmas, I said that I’d welcome a new pair of slippers. […]</p>
+      <small class="source">
+        via <a href="https://bradfrost.com">Blog – Brad Frost</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+  </section>
+  <p class="attribution">
+    Generated by
+    <a href="https://git.sr.ht/~sircmpwn/openring">openring</a>
+  </p>
+</section>
+<style>
+.webring .articles {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+}
+.webring .title {
+  margin: 0;
+}
+.webring .article {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background: #444;
+  min-width: 10rem;
+}
+.webring .summary {
+  font-size: 0.8rem;
+  flex: 1 1 0;
+}
+.webring .attribution {
+  text-align: right;
+  font-size: 0.8rem;
+  color: lightgray;
+}
+</style>
+
+
+  </main>
+  <footer>
+    <p>
+    <a href="mailto:lev@levlaz.org">lev@levlaz.org</a>
+    <br/>
+    <img alt="rss symbol" src="/img/rss.svg" height="10"><a href="/index.xml">rss</a>
+    <br/>
+    <a rel="me" target="_blank" href="https://hachyderm.io/@levlaz">mastodon</a>
+    <br/>
+    <a target="_blank" href="https://github.com/levlaz"> github </a>
+    <br />
+    <a href="/micro"> microblog </a>
+</p>
+
+<p>Having the best day of my life.</p>
+
+<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/">
+    <br>
+    <a property="dct:title" rel="cc:attributionURL" href="https://levlaz.org">levlaz.org</a> &copy; 2004-2025 by <span property="cc:attributionName">Lev Lazinskiy</span> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0</a>
+    <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt="">
+</p> 
+
+<div style="margin-bottom: 25px;">
+    <form method="get" id="ddgSearch" action="https://duckduckgo.com/">
+    <input type="hidden" name="sites" value="levlaz.org"/>
+    <input type="hidden" name="k7" value="#ffffff"/>
+    <input type="hidden" name="k8" value="#222222"/>
+    <input type="hidden" name="k9" value="#00278e"/>
+    <input type="hidden" name="kx" value="#20692b"/>
+    <input type="hidden" name="kj" value="#fafafa"/>
+    <input type="hidden" name="kt" value="p"/>
+    <img style="float:left;padding-right: 5px;" src="/img/ddg.ico" width="22px">
+    <input type="text" name="q" placeholder="Search this site..." aria-label="Search levlaz.org on DuckDuckGo"/>
+    <button type="submit">Search</button>
+</form>
+</div>
+    
+
+  </footer>
+</body>
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<meta name="fediverse:creator" content="@levlaz@hachyderm.io">
+<title>Hacking an Angular.JS game for Fun and (fake) Profit | Lev Lazinskiy</title>
+
+      <link rel="stylesheet" href="/css/main.min.cda80e9eae3204fe10a59ea70553dfefd6d644cd217c61c5d1c329cdb374214e.css" integrity="sha256-zagOnq4yBP4QpZ6nBVPf79bWRM0hfGHF0cMpzbN0IU4=" crossorigin="anonymous">
+
+
+      <script src="/js/main.23cd0c7d837263b9eaeb96ee2d9ccfa2969daa3fa00fa1c1fe8701a9b87251a1.js" integrity="sha256-I80MfYNyY7nq65buLZzPopadqj&#43;gD6HB/ocBqbhyUaE=" crossorigin="anonymous"></script>
+
+<script defer data-domain="levlaz.org" src="https://analytics.levlaz.org/js/script.js"></script>
+
+
+</head>
+<body>
+  <div id="rainbow"></div>
+  <header>
+    <h1><a class="logo" href="/">Lev Lazinskiy</a></h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a style="margin-left:10px;" href="/about/">About</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" aria-current="true" class="ancestor" href="/archive/">Archive</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/tags/">Tags</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/now/">Now</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/links/">Links</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/index.xml">Feed</a>
+    </li>
+    </ul>
+  </nav>
+
+
+
+  </header>
+  <main>
+    
+<script defer page-type="blogpost" data-domain="levlaz.org" src="https://plausible.io/js/script.pageview-props.js"></script>
+<h2 style="margin-bottom:0">Hacking an Angular.JS game for Fun and (fake) Profit</h2>
+
+  <div style="color:grey">
+    
+    
+    <time datetime="2015-07-12T18:00:05-07:00">July 12, 2015</time> |  
+      <a href="/tags/javascript/">javascript</a> |
+      <a href="/tags/gaming/">gaming</a> |
+      <a href="/tags/programming/">programming</a> |
+
+  </div>
+
+  <p>Last night I came across an interesting game called <a href="https://github.com/EricFreeman/GiantShaftEnterprises">Giant Shaft Enterprises</a>. In this game you play the role of a CEO of a fictitious company and the goal is to maximize your profits and reduce costs. You do this by performing business opportunities such as “Network with business leaders”, “Push the envelope”, and “Streamline workforce”. You also can hire employees, purchase buildings, establish various departments, and motivate your workforce with seasoned upper managers. The last thing that you can do in the game is purchase upgrades such as health benefits, electric car charging ports or allow upper managers to hold useless meetings. These upgrades maximize the performance of your workforce. All of these things make more money for your company and allow you to get achievements.</p>
+<p>This is pretty much like any other point, click, and wait game that you would find in the “Top 10 Free Games” section in an App store, but the difference is that this game does not take any real money from you. The game is very entertaining and kind of trolls the world. For example, buying more cubicles for your company provides a higher ROI than hiring additional upper managers. The game is also strangely addictive, I found myself clicking on the same button thousands of times to get more money and increase the profitability of my company.</p>
+<p>I must have played for a few hours before I began filling a bit silly for wasting my time clicking on a button. A few hours later not only was I feeling silly I was also beginning to get an repetitive stress injury in my wrist. That is when I realized that clicking on the button to watch my company sore to greatness was not providing me with the highest ROI. Then I decided to streamline my efforts and opened up the Chrome Javascript Console to see if I could outsource me clicking this button to a simple Javascript program.</p>
+<p>Luckily, this was pretty straightforward. The app is written in Angluar.JS and all of the various buttons that you click to do things are exposed in the DOM. Using JQuery you can access these buttons a simulate a click through the Javascript console that can be found in the Developer Tools of most browsers. For example, the button that lets you take advantage of business opportunities (and instantly raise more money) calls a function called <code>doBusiness</code>. You can select it, and send it a click() like this:</p>
+<div class="codehilite">
+<pre>$('div[ng-click="doBusiness(opportunity, $event)"]').click();
+</pre>
+</div>
+You can also send it 10, 100, or 1000 clicks by wrapping this in a loop.
+<div class="codehilite">
+<pre>for ( i=0; i &lt; 100; i++ ) { $('div[ng-click="doBusiness(opportunity, $event)"]').click(); }
+</pre>
+</div>
+All of the things that you buy in the game use the same function called<code>buyStoreItem</code>, but the individual items (such as employees, cubicles, and harware) are referenced by index. Using the similar method you can purchase things in various multiples by wrapping the function in a for loop like so:
+<div class="codehilite">
+<pre># Buy Cubicle   for ( i=0; i &lt; 100; i++ ) { $('div[ng-click="buyStoreItem($event, item)"]')[1].click(); }
+</pre>
+</div>
+I found that if I try to send more than 1000 clicks at once, the app tends to freeze and bomb out. Looking in htop, chrome is using up 100% of my CPU so it looks like 1000 is the magic number. Javascript is fast and it looks like it sends all 1000 clicks pretty much at once which confuses the app and makes it very sad. I realize this goes against the spirit of the game, but nonetheless it was a fun little exercise and games should reward cleverness. A full list of ~~Cheats~~ Synergistic ROI Optimizers is listed below:
+<div class="codehilite">
+<pre># Giant Shaft Cheats   The lines below simulate clicks, to run then open up the Javascript Console (in Chrome this is Ctrl+Shift+i) and enter them. To change the amount of simulated clicks change the second value in the for loop ( i &lt; 100 ) to something other than 100. Going above 1,000 will probably crash the app :)   
+<h1 id="do-business-opportunities">
+  Do Business Opportunities
+  <a href="#do-business-opportunities">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>for ( i=0; i &lt; 100; i++ ) { $(&lsquo;div[ng-click=&ldquo;doBusiness(opportunity, $event)&rdquo;]&rsquo;).click(); }</p>
+<h1 id="buy-minium-wage-worker">
+  Buy Minium Wage Worker
+  <a href="#buy-minium-wage-worker">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>for ( i=0; i &lt; 100; i++ ) { $(&lsquo;div[ng-click=&ldquo;buyStoreItem($event, item)&rdquo;]&rsquo;)[0].click(); }</p>
+<h1 id="buy-cubicle">
+  Buy Cubicle
+  <a href="#buy-cubicle">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>for ( i=0; i &lt; 100; i++ ) { $(&lsquo;div[ng-click=&ldquo;buyStoreItem($event, item)&rdquo;]&rsquo;)[1].click(); }</p>
+<h1 id="buy-salary-employee">
+  Buy Salary Employee
+  <a href="#buy-salary-employee">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>for ( i=0; i &lt; 100; i++ ) { $(&lsquo;div[ng-click=&ldquo;buyStoreItem($event, item)&rdquo;]&rsquo;)[2].click(); }</p>
+<h1 id="buy-hardware">
+  Buy Hardware
+  <a href="#buy-hardware">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>for ( i=0; i &lt; 100; i++ ) { $(&lsquo;div[ng-click=&ldquo;buyStoreItem($event, item)&rdquo;]&rsquo;)[3].click(); }</p>
+<h1 id="buy-hr-department">
+  Buy HR Department
+  <a href="#buy-hr-department">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>for ( i=0; i &lt; 100; i++ ) { $(&lsquo;div[ng-click=&ldquo;buyStoreItem($event, item)&rdquo;]&rsquo;)[4].click(); }</p>
+<h1 id="buy-accounting-department">
+  Buy Accounting Department
+  <a href="#buy-accounting-department">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>for ( i=0; i &lt; 100; i++ ) { $(&lsquo;div[ng-click=&ldquo;buyStoreItem($event, item)&rdquo;]&rsquo;)[5].click(); }</p>
+<h1 id="buy-benefits-package">
+  Buy Benefits Package
+  <a href="#buy-benefits-package">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>for ( i=0; i &lt; 100; i++ ) { $(&lsquo;div[ng-click=&ldquo;buyStoreItem($event, item)&rdquo;]&rsquo;)[6].click(); }</p>
+<h1 id="buy-useless-upper-management">
+  Buy (Useless) Upper Management
+  <a href="#buy-useless-upper-management">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>for ( i=0; i &lt; 100; i++ ) { $(&lsquo;div[ng-click=&ldquo;buyStoreItem($event, item)&rdquo;]&rsquo;)[7].click(); }</p>
+<h1 id="buy-executive">
+  Buy Executive
+  <a href="#buy-executive">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>for ( i=0; i &lt; 100; i++ ) { $(&lsquo;div[ng-click=&ldquo;buyStoreItem($event, item)&rdquo;]&rsquo;)[8].click(); }</p>
+<h1 id="buy-office-building">
+  Buy Office Building
+  <a href="#buy-office-building">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h1>
+<p>for ( i=0; i &lt; 100; i++ ) { $(&lsquo;div[ng-click=&ldquo;buyStoreItem($event, item)&rdquo;]&rsquo;)[9].click(); }
+</pre></p>
+</div>
+Thanks to this little hack I am the king of Giant Shaft Enterprises. Thank you to <a href="https://github.com/EricFreeman">Eric Freeman</a> for making this awesome game!
+<p><strong>UPDATE 1:</strong>  I was curious to see what the max number of clicks I could pass through was. I enabled logging to show me when the loop made the 100th click.</p>
+<div class="codehilite">
+<pre>for ( i=0; i &lt; 1000; i++ ) { $('div[ng-click="doBusiness(opportunity, $event)"]').click(); if (i % 100 == 0 ) {console.log('Click #' + i)}}
+</pre>
+</div>
+It looks like the app actually does not crash … but becomes super slow after about 3000 clicks. So to optimize ROI you should only cheat with around 1000 fake clicks at a time.
+<p><strong>UPDATE 2</strong>: The final step of this was obviously to automate the automated clicks. Using Javascripts setInterval method, we can have the script run indefinitely. For example the following code, does 100 business opportunities every 3 seconds, forever.</p>
+<div class="codehilite">
+<pre>setInterval(function() {for ( i=0; i &lt; 100; i++ ) { $('div[ng-click="doBusiness(opportunity, $event)"]').click(); if (i % 10 == 0 ) {console.log('Click #' + i)}}}, 3000);
+</pre>
+</div>
+
+
+  <div class="more">
+    <p>
+        Thank you for reading! Share your thoughts with me 
+        on <a href="https://bsky.app/profile/levlaz.org"> bluesky</a>, <a href="https://hachyderm.io/@levlaz">mastodon</a>, or via 
+        <a id="email" href="mailto:lev@levlaz.org?subject=Re: your blog post">email</a>. 
+
+	<script>
+		document.getElementById('email').addEventListener('click', function(event) {
+			event.preventDefault();
+			var email = 'lev@levlaz.org';
+			var subject = encodeURIComponent(document.title);
+			var mailToLink = 'mailto:' + email + '?subject=Re: ' + subject;
+
+			window.location.href = mailToLink;
+		});
+	</script>
+    </p>
+    <p>
+        Check out some more stuff to read down below.
+    </p>
+        
+        <p>
+            <b>Most popular posts this month</b>
+        </p>
+        <ul>
+            
+            <li>
+                <a href="/2024/">2024 </a>
+            </li>
+            
+            <li>
+                <a href="/reinstalling-windows-at-1am/">Reinstalling Windows at 1am </a>
+            </li>
+            
+            <li>
+                <a href="/sqlite-db-migrations-with-pragma-user_version/">SQLite DB Migrations with PRAGMA user_version </a>
+            </li>
+            
+            <li>
+                <a href="/my-custom-miniflux-css-theme/">My Custom Miniflux CSS Theme </a>
+            </li>
+            
+            <li>
+                <a href="/how-to-disable-wayland-in-debian-testing/">How to Disable Wayland in Debian Testing </a>
+            </li>
+            
+        </ul>
+        
+        
+        <p><b>Recent Favorite Blog Posts</b></p>
+        <p> This is a collection of the last 8 posts that I bookmarked.</p>
+        <ul>
+            
+            <li>
+                <a href="https://theinternet.review/2025/01/03/25-years-of-the-mac-dock/">25 Years of the Mac OS Dock</a> from The Internet Review
+            </li>
+            
+            <li>
+                <a href="https://charity.wtf/2024/12/17/founder-mode-and-the-art-of-mythmaking/">“Founder Mode” and the Art of Mythmaking</a> from charity.wtf
+            </li>
+            
+            <li>
+                <a href="https://cacm.acm.org/blogcacm/the-rise-of-bluesky/">The Rise of Bluesky</a> from Communications of the ACM
+            </li>
+            
+            <li>
+                <a href="https://thecreativeindependent.com/people/podcaster-dj-and-writer-dj-louie-xiv-on-going-for-it-even-if-youre-terrified/">Podcaster, DJ, and writer DJ Louie XIV on going for it (even if you’re terrified)</a> from The Creative Independent
+            </li>
+            
+            <li>
+                <a href="https://rknight.me/blog/useful-bluesky-tools/">Useful Bluesky Tools</a> from Robb Knight • Posts • Atom Feed
+            </li>
+            
+            <li>
+                <a href="https://cdevroe.com/2024/11/18/re-bluesky/">Re: Bluesky</a> from Colin Devroe
+            </li>
+            
+            <li>
+                <a href="https://www.straphanger.blog/from-the-red-hell-to-the-sky-of-blue/">From the Red Hell to the Sky of Blue</a> from Straphanger
+            </li>
+            
+            <li>
+                <a href="https://sive.rs/salt">We don’t need to use what we make</a> from Derek Sivers blog
+            </li>
+            
+        </ul>
+        
+</div>
+
+  
+<section class="webring">
+  <h3>Articles from blogs I follow around the net</h3>
+  <section class="articles">
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://kevquirk.com/blog/aligning-automattic-s-sponsored-contributions-to-wordpress" target="_blank" rel="noopener">Aligning Automattic’s Sponsored Contributions to WordPress</a>
+      </h4>
+      <p class="summary" dir="auto">
+
+                  
+            
+              Aligning Automattic’s Sponsored Contributions to WordPress
+              by &#34;Automattic&#34; (let&#39;s be honest, it&#39;s Matt Mullenweg)
+              Automattic plan to fuck themselves over further (and by…</p>
+      <small class="source">
+        via <a href="https://kevquirk.com">Kev Quirk</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://www.theintrinsicperspective.com/p/stop-speedrunning-to-a-dystopia" target="_blank" rel="noopener">Stop speedrunning to a dystopia</a>
+      </h4>
+      <p class="summary" dir="auto">We need more warnings about amusing ourselves to death</p>
+      <small class="source">
+        via <a href="https://www.theintrinsicperspective.com">The Intrinsic Perspective</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://bradfrost.com/blog/post/durable-products/" target="_blank" rel="noopener">Durable products</a>
+      </h4>
+      <p class="summary" dir="auto">I wore my Olukai Mahana slippers all day every day for 3 years. They finally got beat up enough that when my family asked me what I wanted for Christmas, I said that I’d welcome a new pair of slippers. […]</p>
+      <small class="source">
+        via <a href="https://bradfrost.com">Blog – Brad Frost</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+  </section>
+  <p class="attribution">
+    Generated by
+    <a href="https://git.sr.ht/~sircmpwn/openring">openring</a>
+  </p>
+</section>
+<style>
+.webring .articles {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+}
+.webring .title {
+  margin: 0;
+}
+.webring .article {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background: #444;
+  min-width: 10rem;
+}
+.webring .summary {
+  font-size: 0.8rem;
+  flex: 1 1 0;
+}
+.webring .attribution {
+  text-align: right;
+  font-size: 0.8rem;
+  color: lightgray;
+}
+</style>
+
+
+  </main>
+  <footer>
+    <p>
+    <a href="mailto:lev@levlaz.org">lev@levlaz.org</a>
+    <br/>
+    <img alt="rss symbol" src="/img/rss.svg" height="10"><a href="/index.xml">rss</a>
+    <br/>
+    <a rel="me" target="_blank" href="https://hachyderm.io/@levlaz">mastodon</a>
+    <br/>
+    <a target="_blank" href="https://github.com/levlaz"> github </a>
+    <br />
+    <a href="/micro"> microblog </a>
+</p>
+
+<p>Having the best day of my life.</p>
+
+<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/">
+    <br>
+    <a property="dct:title" rel="cc:attributionURL" href="https://levlaz.org">levlaz.org</a> &copy; 2004-2025 by <span property="cc:attributionName">Lev Lazinskiy</span> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0</a>
+    <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt="">
+</p> 
+
+<div style="margin-bottom: 25px;">
+    <form method="get" id="ddgSearch" action="https://duckduckgo.com/">
+    <input type="hidden" name="sites" value="levlaz.org"/>
+    <input type="hidden" name="k7" value="#ffffff"/>
+    <input type="hidden" name="k8" value="#222222"/>
+    <input type="hidden" name="k9" value="#00278e"/>
+    <input type="hidden" name="kx" value="#20692b"/>
+    <input type="hidden" name="kj" value="#fafafa"/>
+    <input type="hidden" name="kt" value="p"/>
+    <img style="float:left;padding-right: 5px;" src="/img/ddg.ico" width="22px">
+    <input type="text" name="q" placeholder="Search this site..." aria-label="Search levlaz.org on DuckDuckGo"/>
+    <button type="submit">Search</button>
+</form>
+</div>
+    
+
+  </footer>
+</body>
+</html>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<meta name="fediverse:creator" content="@levlaz@hachyderm.io">
+<title>Converting CSV to a SQLite Database | Lev Lazinskiy</title>
+
+      <link rel="stylesheet" href="/css/main.min.cda80e9eae3204fe10a59ea70553dfefd6d644cd217c61c5d1c329cdb374214e.css" integrity="sha256-zagOnq4yBP4QpZ6nBVPf79bWRM0hfGHF0cMpzbN0IU4=" crossorigin="anonymous">
+
+
+      <script src="/js/main.23cd0c7d837263b9eaeb96ee2d9ccfa2969daa3fa00fa1c1fe8701a9b87251a1.js" integrity="sha256-I80MfYNyY7nq65buLZzPopadqj&#43;gD6HB/ocBqbhyUaE=" crossorigin="anonymous"></script>
+
+<script defer data-domain="levlaz.org" src="https://analytics.levlaz.org/js/script.js"></script>
+
+
+</head>
+<body>
+  <div id="rainbow"></div>
+  <header>
+    <h1><a class="logo" href="/">Lev Lazinskiy</a></h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a style="margin-left:10px;" href="/about/">About</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" aria-current="true" class="ancestor" href="/archive/">Archive</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/tags/">Tags</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/now/">Now</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/links/">Links</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/index.xml">Feed</a>
+    </li>
+    </ul>
+  </nav>
+
+
+
+  </header>
+  <main>
+    
+<script defer page-type="blogpost" data-domain="levlaz.org" src="https://plausible.io/js/script.pageview-props.js"></script>
+<h2 style="margin-bottom:0">Converting CSV to a SQLite Database</h2>
+
+  <div style="color:grey">
+    
+    
+    <time datetime="2018-12-15T15:08:55-08:00">December 15, 2018</time> |  
+      <a href="/tags/programming/">programming</a> |
+      <a href="/tags/databases/">databases</a> |
+
+  </div>
+
+  <!-- wp:paragraph -->
+<p>As a part of my data science course on EdX we have been working with a lot of csv files. I spoke SQL long before I spoke Pandas and I find that it is much easier to do initial exploration of the data using raw SQL queries compared to the Pandas DSL.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><a href="https://www.kaggle.com/">Kaggle</a> is a great repository full of useful data sets that are ripe for exploration. While a lot of these data sets come in both csv and sql flavors, some of them are CSV only. Using SQLit we are able to easily import these csv files into a database and then run queries for further data exploration.&nbsp;</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Im going to use the <a href="https://www.kaggle.com/kemical/kickstarter-projects">kickstarter data set</a> for this tutorial, feel free to download the csv files from kaggle so that you can follow along.&nbsp;</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading -->
+<h2>Pre Requisites</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>Make sure that you have <a href="https://www.sqlite.org/index.html">SQLite</a> installed before getting started with this tutorial.&nbsp;</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading -->
+<h2>Steps to Convert CSV to SQLite</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>First, Download the data set from kaggle, this will come in the form of a zip file. Unzip this and open up a terminal in the directory where you have the new unzipped <strong>kickstarter-projects</strong> folder.&nbsp;</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>In your terminal open up a new sqlite session followed by the name of the file that you want to save your new database to.&nbsp;</p>
+<!-- /wp:paragraph -->
+<!-- wp:preformatted -->
+<pre class="wp-block-preformatted">sqlite3 ks.db</pre>
+<!-- /wp:preformatted -->
+<!-- wp:paragraph -->
+<p>Inside of the sqlite shell, change the mode to csv.&nbsp;</p>
+<!-- /wp:paragraph -->
+<!-- wp:preformatted -->
+<pre class="wp-block-preformatted">.mode csv</pre>
+<!-- /wp:preformatted -->
+<!-- wp:paragraph -->
+<p>Import the csv file, and add the name of the table that you want the data to be imported into.&nbsp;</p>
+<!-- /wp:paragraph -->
+<!-- wp:preformatted -->
+<pre class="wp-block-preformatted">.import kickstarter-projects/ks-projects-201801.csv ks</pre>
+<!-- /wp:preformatted -->
+<!-- wp:paragraph -->
+<p>Verify that everything was imported correctly. Take a look at the schema, and first couple of rows. Your output should look something like this:&nbsp;</p>
+<!-- /wp:paragraph -->
+<!-- wp:preformatted -->
+<pre class="wp-block-preformatted">sqlite&gt; .schema ks<br><br>CREATE TABLE ks(<br>  "ID" TEXT,<br>  "name" TEXT,<br>  "category" TEXT,<br>  "main_category" TEXT,<br>  "currency" TEXT,<br>  "deadline" TEXT,<br>  "goal" TEXT,<br>  "launched" TEXT,<br>  "pledged" TEXT,<br>  "state" TEXT,<br>  "backers" TEXT,<br>  "country" TEXT,<br>  "usd pledged" TEXT,<br>  "usd_pledged_real" TEXT,<br>  "usd_goal_real" TEXT<br>);<br><br><br>sqlite&gt; select * from ks limit 5;<br><br>1000002330|The Songs of Adelaide &amp; Abullah|Poetry|Publishing|GBP|2015-10-09|1000.00|2015-08-11 12:12:28|0.00|failed|0|GB|0.00|0.00|1533.95<br>1000003930|Greeting From Earth: ZGAC Arts Capsule For ET|Narrative Film|Film &amp; Video|USD|2017-11-01|30000.00|2017-09-02 04:43:57|2421.00|failed|15|US|100.00|2421.00|30000.00<br>1000004038|Where is Hank?|Narrative Film|Film &amp; Video|USD|2013-02-26|45000.00|2013-01-12 00:20:50|220.00|failed|3|US|220.00|220.00|45000.00<br>1000007540|ToshiCapital Rekordz Needs Help to Complete Album|Music|Music|USD|2012-04-16|5000.00|2012-03-17 03:24:11|1.00|failed|1|US|1.00|1.00|5000.00<br>1000011046|Community Film Project: The Art of Neighborhood Filmmaking|Film &amp; Video|Film &amp; Video|USD|2015-08-29|19500.00|2015-07-04 08:35:03|1283.00|canceled|14|US|1283.00|1283.00|19500.00<br></pre>
+<!-- /wp:preformatted -->
+<!-- wp:paragraph -->
+<p>Excellent! Now you can query this entire data set as your normally would. Happy data exploration!&nbsp;</p>
+<!-- /wp:paragraph -->
+
+
+  <div class="more">
+    <p>
+        Thank you for reading! Share your thoughts with me 
+        on <a href="https://bsky.app/profile/levlaz.org"> bluesky</a>, <a href="https://hachyderm.io/@levlaz">mastodon</a>, or via 
+        <a id="email" href="mailto:lev@levlaz.org?subject=Re: your blog post">email</a>. 
+
+	<script>
+		document.getElementById('email').addEventListener('click', function(event) {
+			event.preventDefault();
+			var email = 'lev@levlaz.org';
+			var subject = encodeURIComponent(document.title);
+			var mailToLink = 'mailto:' + email + '?subject=Re: ' + subject;
+
+			window.location.href = mailToLink;
+		});
+	</script>
+    </p>
+    <p>
+        Check out some more stuff to read down below.
+    </p>
+        
+        <p>
+            <b>Most popular posts this month</b>
+        </p>
+        <ul>
+            
+            <li>
+                <a href="/2024/">2024 </a>
+            </li>
+            
+            <li>
+                <a href="/reinstalling-windows-at-1am/">Reinstalling Windows at 1am </a>
+            </li>
+            
+            <li>
+                <a href="/sqlite-db-migrations-with-pragma-user_version/">SQLite DB Migrations with PRAGMA user_version </a>
+            </li>
+            
+            <li>
+                <a href="/my-custom-miniflux-css-theme/">My Custom Miniflux CSS Theme </a>
+            </li>
+            
+            <li>
+                <a href="/how-to-disable-wayland-in-debian-testing/">How to Disable Wayland in Debian Testing </a>
+            </li>
+            
+        </ul>
+        
+        
+        <p><b>Recent Favorite Blog Posts</b></p>
+        <p> This is a collection of the last 8 posts that I bookmarked.</p>
+        <ul>
+            
+            <li>
+                <a href="https://theinternet.review/2025/01/03/25-years-of-the-mac-dock/">25 Years of the Mac OS Dock</a> from The Internet Review
+            </li>
+            
+            <li>
+                <a href="https://charity.wtf/2024/12/17/founder-mode-and-the-art-of-mythmaking/">“Founder Mode” and the Art of Mythmaking</a> from charity.wtf
+            </li>
+            
+            <li>
+                <a href="https://cacm.acm.org/blogcacm/the-rise-of-bluesky/">The Rise of Bluesky</a> from Communications of the ACM
+            </li>
+            
+            <li>
+                <a href="https://thecreativeindependent.com/people/podcaster-dj-and-writer-dj-louie-xiv-on-going-for-it-even-if-youre-terrified/">Podcaster, DJ, and writer DJ Louie XIV on going for it (even if you’re terrified)</a> from The Creative Independent
+            </li>
+            
+            <li>
+                <a href="https://rknight.me/blog/useful-bluesky-tools/">Useful Bluesky Tools</a> from Robb Knight • Posts • Atom Feed
+            </li>
+            
+            <li>
+                <a href="https://cdevroe.com/2024/11/18/re-bluesky/">Re: Bluesky</a> from Colin Devroe
+            </li>
+            
+            <li>
+                <a href="https://www.straphanger.blog/from-the-red-hell-to-the-sky-of-blue/">From the Red Hell to the Sky of Blue</a> from Straphanger
+            </li>
+            
+            <li>
+                <a href="https://sive.rs/salt">We don’t need to use what we make</a> from Derek Sivers blog
+            </li>
+            
+        </ul>
+        
+</div>
+
+  
+<section class="webring">
+  <h3>Articles from blogs I follow around the net</h3>
+  <section class="articles">
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://kevquirk.com/blog/aligning-automattic-s-sponsored-contributions-to-wordpress" target="_blank" rel="noopener">Aligning Automattic’s Sponsored Contributions to WordPress</a>
+      </h4>
+      <p class="summary" dir="auto">
+
+                  
+            
+              Aligning Automattic’s Sponsored Contributions to WordPress
+              by &#34;Automattic&#34; (let&#39;s be honest, it&#39;s Matt Mullenweg)
+              Automattic plan to fuck themselves over further (and by…</p>
+      <small class="source">
+        via <a href="https://kevquirk.com">Kev Quirk</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://www.theintrinsicperspective.com/p/stop-speedrunning-to-a-dystopia" target="_blank" rel="noopener">Stop speedrunning to a dystopia</a>
+      </h4>
+      <p class="summary" dir="auto">We need more warnings about amusing ourselves to death</p>
+      <small class="source">
+        via <a href="https://www.theintrinsicperspective.com">The Intrinsic Perspective</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://bradfrost.com/blog/post/durable-products/" target="_blank" rel="noopener">Durable products</a>
+      </h4>
+      <p class="summary" dir="auto">I wore my Olukai Mahana slippers all day every day for 3 years. They finally got beat up enough that when my family asked me what I wanted for Christmas, I said that I’d welcome a new pair of slippers. […]</p>
+      <small class="source">
+        via <a href="https://bradfrost.com">Blog – Brad Frost</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+  </section>
+  <p class="attribution">
+    Generated by
+    <a href="https://git.sr.ht/~sircmpwn/openring">openring</a>
+  </p>
+</section>
+<style>
+.webring .articles {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+}
+.webring .title {
+  margin: 0;
+}
+.webring .article {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background: #444;
+  min-width: 10rem;
+}
+.webring .summary {
+  font-size: 0.8rem;
+  flex: 1 1 0;
+}
+.webring .attribution {
+  text-align: right;
+  font-size: 0.8rem;
+  color: lightgray;
+}
+</style>
+
+
+  </main>
+  <footer>
+    <p>
+    <a href="mailto:lev@levlaz.org">lev@levlaz.org</a>
+    <br/>
+    <img alt="rss symbol" src="/img/rss.svg" height="10"><a href="/index.xml">rss</a>
+    <br/>
+    <a rel="me" target="_blank" href="https://hachyderm.io/@levlaz">mastodon</a>
+    <br/>
+    <a target="_blank" href="https://github.com/levlaz"> github </a>
+    <br />
+    <a href="/micro"> microblog </a>
+</p>
+
+<p>Having the best day of my life.</p>
+
+<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/">
+    <br>
+    <a property="dct:title" rel="cc:attributionURL" href="https://levlaz.org">levlaz.org</a> &copy; 2004-2025 by <span property="cc:attributionName">Lev Lazinskiy</span> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0</a>
+    <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt="">
+</p> 
+
+<div style="margin-bottom: 25px;">
+    <form method="get" id="ddgSearch" action="https://duckduckgo.com/">
+    <input type="hidden" name="sites" value="levlaz.org"/>
+    <input type="hidden" name="k7" value="#ffffff"/>
+    <input type="hidden" name="k8" value="#222222"/>
+    <input type="hidden" name="k9" value="#00278e"/>
+    <input type="hidden" name="kx" value="#20692b"/>
+    <input type="hidden" name="kj" value="#fafafa"/>
+    <input type="hidden" name="kt" value="p"/>
+    <img style="float:left;padding-right: 5px;" src="/img/ddg.ico" width="22px">
+    <input type="text" name="q" placeholder="Search this site..." aria-label="Search levlaz.org on DuckDuckGo"/>
+    <button type="submit">Search</button>
+</form>
+</div>
+    
+
+  </footer>
+</body>
+</html>

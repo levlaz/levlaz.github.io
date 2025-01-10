@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<meta name="fediverse:creator" content="@levlaz@hachyderm.io">
+<title>Testing Syntax Errors in Apache Config | Lev Lazinskiy</title>
+
+      <link rel="stylesheet" href="/css/main.min.cda80e9eae3204fe10a59ea70553dfefd6d644cd217c61c5d1c329cdb374214e.css" integrity="sha256-zagOnq4yBP4QpZ6nBVPf79bWRM0hfGHF0cMpzbN0IU4=" crossorigin="anonymous">
+
+
+      <script src="/js/main.23cd0c7d837263b9eaeb96ee2d9ccfa2969daa3fa00fa1c1fe8701a9b87251a1.js" integrity="sha256-I80MfYNyY7nq65buLZzPopadqj&#43;gD6HB/ocBqbhyUaE=" crossorigin="anonymous"></script>
+
+<script defer data-domain="levlaz.org" src="https://analytics.levlaz.org/js/script.js"></script>
+
+
+</head>
+<body>
+  <div id="rainbow"></div>
+  <header>
+    <h1><a class="logo" href="/">Lev Lazinskiy</a></h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a style="margin-left:10px;" href="/about/">About</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" aria-current="true" class="ancestor" href="/archive/">Archive</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/tags/">Tags</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/now/">Now</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/links/">Links</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/index.xml">Feed</a>
+    </li>
+    </ul>
+  </nav>
+
+
+
+  </header>
+  <main>
+    
+<script defer page-type="blogpost" data-domain="levlaz.org" src="https://plausible.io/js/script.pageview-props.js"></script>
+<h2 style="margin-bottom:0">Testing Syntax Errors in Apache Config</h2>
+
+  <div style="color:grey">
+    
+    
+    <time datetime="2017-05-01T19:23:55-07:00">May 1, 2017</time> |  
+      <a href="/tags/linux/">linux</a> |
+      <a href="/tags/devops/">devops</a> |
+
+  </div>
+
+  <p>If you spend any time mucking around config files in Linux you are likely to run into some syntax errors sooner or later. Recently I was setting up cgit on Debian 8 and was banging my head against the wall for a few minutes trying to figure out why apache was so unhappy.</p>
+<h2>Symptoms</h2>
+The key issue was when I restarted apache2 like I normally would after adding a new configuration it spat out an angry message at me.
+<div class="codehilite">
+<pre>root@nuc:/etc/apache2# sudo service apache2 restart
+Job for apache2.service failed. See 'systemctl status apache2.service' and 'journalctl -xn' for details.
+</pre>
+</div>
+<h2>Troubleshooting</h2>
+The first place that I would look is the error logs. However, in this particular case they were not very helpful.
+<div class="codehilite">
+<pre>root@nuc:/etc/apache2# tail -f /var/log/apache2/error.log
+[Mon May 01 21:00:11.922943 2017] [mpm_prefork:notice] [pid 20454] AH00169: caught SIGTERM, shutting down
+</pre>
+</div>
+Next, I read the error message per the suggestion from the restart command. This was also not very helpful.
+<div class="codehilite">
+<pre><span class="nt">root</span><span class="p">@</span><span class="k">nuc</span><span class="o">:/</span><span class="nt">etc</span><span class="o">/</span><span class="nt">apache2</span><span class="err">#</span> <span class="nt">systemctl</span> <span class="nt">status</span> <span class="nt">apache2</span><span class="p">.</span><span class="nc">service</span>
+<span class="err">●</span> <span class="nt">apache2</span><span class="p">.</span><span class="nc">service</span> <span class="nt">-</span> <span class="nt">LSB</span><span class="o">:</span> <span class="nt">Apache2</span> <span class="nt">web</span> <span class="nt">server</span>
+ <span class="nt">Loaded</span><span class="o">:</span> <span class="nt">loaded</span> <span class="o">(/</span><span class="nt">etc</span><span class="o">/</span><span class="nt">init</span><span class="p">.</span><span class="nc">d</span><span class="o">/</span><span class="nt">apache2</span><span class="o">)</span>
+ <span class="nt">Drop-In</span><span class="o">:</span> <span class="o">/</span><span class="nt">lib</span><span class="o">/</span><span class="nt">systemd</span><span class="o">/</span><span class="nt">system</span><span class="o">/</span><span class="nt">apache2</span><span class="p">.</span><span class="nc">service</span><span class="p">.</span><span class="nc">d</span>
+ <span class="err">└─</span><span class="nt">forking</span><span class="p">.</span><span class="nc">conf</span>
+ <span class="nt">Active</span><span class="o">:</span> <span class="nt">failed</span> <span class="o">(</span><span class="nt">Result</span><span class="o">:</span> <span class="nt">exit-code</span><span class="o">)</span> <span class="nt">since</span> <span class="nt">Mon</span> <span class="nt">2017-05-01</span> <span class="nt">21</span><span class="p">:</span><span class="nd">05</span><span class="p">:</span><span class="nd">58</span> <span class="nt">PDT</span><span class="p">;</span> <span class="nt">1min</span> <span class="nt">45s</span> <span class="nt">ago</span>
+ <span class="nt">Process</span><span class="o">:</span> <span class="nt">20746</span> <span class="nt">ExecStop</span><span class="o">=/</span><span class="nt">etc</span><span class="o">/</span><span class="nt">init</span><span class="p">.</span><span class="nc">d</span><span class="o">/</span><span class="nt">apache2</span> <span class="nt">stop</span> <span class="o">(</span><span class="nt">code</span><span class="o">=</span><span class="nt">exited</span><span class="o">,</span> <span class="nt">status</span><span class="o">=</span><span class="nt">0</span><span class="o">/</span><span class="nt">SUCCESS</span><span class="o">)</span>
+ <span class="nt">Process</span><span class="o">:</span> <span class="nt">20697</span> <span class="nt">ExecReload</span><span class="o">=/</span><span class="nt">etc</span><span class="o">/</span><span class="nt">init</span><span class="p">.</span><span class="nc">d</span><span class="o">/</span><span class="nt">apache2</span> <span class="nt">reload</span> <span class="o">(</span><span class="nt">code</span><span class="o">=</span><span class="nt">exited</span><span class="o">,</span> <span class="nt">status</span><span class="o">=</span><span class="nt">1</span><span class="o">/</span><span class="nt">FAILURE</span><span class="o">)</span>
+ <span class="nt">Process</span><span class="o">:</span> <span class="nt">20920</span> <span class="nt">ExecStart</span><span class="o">=/</span><span class="nt">etc</span><span class="o">/</span><span class="nt">init</span><span class="p">.</span><span class="nc">d</span><span class="o">/</span><span class="nt">apache2</span> <span class="nt">start</span> <span class="o">(</span><span class="nt">code</span><span class="o">=</span><span class="nt">exited</span><span class="o">,</span> <span class="nt">status</span><span class="o">=</span><span class="nt">1</span><span class="o">/</span><span class="nt">FAILURE</span><span class="o">)</span>
+<p><span class="nt">May</span> <span class="nt">01</span> <span class="nt">21</span><span class="p">:</span><span class="nd">05</span><span class="p">:</span><span class="nd">58</span> <span class="nt">nuc</span> <span class="nt">apache2</span><span class="cp">[</span><span class="mi">20920</span><span class="cp">]</span><span class="o">:</span> <span class="nt">Starting</span> <span class="nt">web</span> <span class="nt">server</span><span class="o">:</span> <span class="nt">apache2</span> <span class="nt">failed</span><span class="o">!</span>
+<span class="nt">May</span> <span class="nt">01</span> <span class="nt">21</span><span class="p">:</span><span class="nd">05</span><span class="p">:</span><span class="nd">58</span> <span class="nt">nuc</span> <span class="nt">apache2</span><span class="cp">[</span><span class="mi">20920</span><span class="cp">]</span><span class="o">:</span> <span class="nt">The</span> <span class="nt">apache2</span> <span class="nt">configtest</span> <span class="nt">failed</span><span class="o">.</span> <span class="o">&hellip;</span> <span class="o">(</span><span class="nt">warning</span><span class="o">).</span>
+<span class="nt">May</span> <span class="nt">01</span> <span class="nt">21</span><span class="p">:</span><span class="nd">05</span><span class="p">:</span><span class="nd">58</span> <span class="nt">nuc</span> <span class="nt">apache2</span><span class="cp">[</span><span class="mi">20920</span><span class="cp">]</span><span class="o">:</span> <span class="nt">Output</span> <span class="nt">of</span> <span class="nt">config</span> <span class="nt">test</span> <span class="nt">was</span><span class="o">:</span>
+<span class="nt">May</span> <span class="nt">01</span> <span class="nt">21</span><span class="p">:</span><span class="nd">05</span><span class="p">:</span><span class="nd">58</span> <span class="nt">nuc</span> <span class="nt">apache2</span><span class="cp">[</span><span class="mi">20920</span><span class="cp">]</span><span class="o">:</span> <span class="nt">apache2</span><span class="o">:</span> <span class="nt">Syntax</span> <span class="nt">error</span> <span class="nt">on</span> <span class="nt">line</span> <span class="nt">219</span> <span class="nt">of</span> <span class="o">/</span><span class="nt">etc</span><span class="o">/</span><span class="nt">apache2</span><span class="o">/</span><span class="nt">apache2</span><span class="p">.</span><span class="nc">conf</span><span class="o">:</span> <span class="nt">Syntax</span> <span class="nt">error</span> <span class="nt">on</span> <span class="nt">line</span> <span class="nt">22</span> <span class="nt">of</span> <span class="o">/</span><span class="nt">etc</span><span class="o">/</span><span class="nt">a</span><span class="o">&hellip;</span> <span class="nt">section</span>
+<span class="nt">May</span> <span class="nt">01</span> <span class="nt">21</span><span class="p">:</span><span class="nd">05</span><span class="p">:</span><span class="nd">58</span> <span class="nt">nuc</span> <span class="nt">apache2</span><span class="cp">[</span><span class="mi">20920</span><span class="cp">]</span><span class="o">:</span> <span class="nt">Action</span> <span class="s1">&lsquo;configtest&rsquo;</span> <span class="nt">failed</span><span class="o">.</span>
+<span class="nt">May</span> <span class="nt">01</span> <span class="nt">21</span><span class="p">:</span><span class="nd">05</span><span class="p">:</span><span class="nd">58</span> <span class="nt">nuc</span> <span class="nt">apache2</span><span class="cp">[</span><span class="mi">20920</span><span class="cp">]</span><span class="o">:</span> <span class="nt">The</span> <span class="nt">Apache</span> <span class="nt">error</span> <span class="nt">log</span> <span class="nt">may</span> <span class="nt">have</span> <span class="nt">more</span> <span class="nt">information</span><span class="o">.</span>
+<span class="nt">May</span> <span class="nt">01</span> <span class="nt">21</span><span class="p">:</span><span class="nd">05</span><span class="p">:</span><span class="nd">58</span> <span class="nt">nuc</span> <span class="nt">systemd</span><span class="cp">[</span><span class="mi">1</span><span class="cp">]</span><span class="o">:</span> <span class="nt">apache2</span><span class="p">.</span><span class="nc">service</span><span class="o">:</span> <span class="nt">control</span> <span class="nt">process</span> <span class="nt">exited</span><span class="o">,</span> <span class="nt">code</span><span class="o">=</span><span class="nt">exited</span> <span class="nt">status</span><span class="o">=</span><span class="nt">1</span>
+<span class="nt">May</span> <span class="nt">01</span> <span class="nt">21</span><span class="p">:</span><span class="nd">05</span><span class="p">:</span><span class="nd">58</span> <span class="nt">nuc</span> <span class="nt">systemd</span><span class="cp">[</span><span class="mi">1</span><span class="cp">]</span><span class="o">:</span> <span class="nt">Failed</span> <span class="nt">to</span> <span class="nt">start</span> <span class="nt">LSB</span><span class="o">:</span> <span class="nt">Apache2</span> <span class="nt">web</span> <span class="nt">server</span><span class="o">.</span>
+<span class="nt">May</span> <span class="nt">01</span> <span class="nt">21</span><span class="p">:</span><span class="nd">05</span><span class="p">:</span><span class="nd">58</span> <span class="nt">nuc</span> <span class="nt">systemd</span><span class="cp">[</span><span class="mi">1</span><span class="cp">]</span><span class="o">:</span> <span class="nt">Unit</span> <span class="nt">apache2</span><span class="p">.</span><span class="nc">service</span> <span class="nt">entered</span> <span class="nt">failed</span> <span class="nt">state</span><span class="o">.</span>
+<span class="nt">Hint</span><span class="o">:</span> <span class="nt">Some</span> <span class="nt">lines</span> <span class="nt">were</span> <span class="nt">ellipsized</span><span class="o">,</span> <span class="nt">use</span> <span class="nt">-l</span> <span class="nt">to</span> <span class="nt">show</span> <span class="nt">in</span> <span class="nt">full</span><span class="o">.</span>
+</pre></p>
+</div>
+Inspecting the error message, we see that it is unhappy with line 219 of the main <code>/etc/apache2/apache2.conf</code> file. Looking at that line we can see that it is simply loading all of the other config files in <code>sites-enabled</code> which means that before it even gets to load my new cgit config file it fails.
+<h2>Help</h2>
+So now that we have done some basic troubleshooting. It's time to dig into the manual for further information. I know that the config file is failing to load, and knowing my fat fingers it is very likely a config error on my part. Before reading 200 pages of documentation on the apache website we should take a look at the built in help to see if we can find something of value.
+<div class="codehilite">
+<pre>root@nuc:/etc/apache2# apache2 -help
+Usage: apache2 [-D name] [-d directory] [-f file]
+ [-C "directive"] [-c "directive"]
+ [-k start|restart|graceful|graceful-stop|stop]
+ [-v] [-V] [-h] [-l] [-L] [-t] [-T] [-S] [-X]
+Options:
+ -D name : define a name for use in &lt;IfDefine name&gt; directives
+ -d directory : specify an alternate initial ServerRoot
+ -f file : specify an alternate ServerConfigFile
+ -C "directive" : process directive before reading config files
+ -c "directive" : process directive after reading config files
+ -e level : show startup errors of level (see LogLevel)
+ -E file : log startup errors to file
+ -v : show version number
+ -V : show compile settings
+ -h : list available command line options (this page)
+ -l : list compiled in modules
+ -L : list available configuration directives
+ -t -D DUMP_VHOSTS : show parsed vhost settings
+ -t -D DUMP_RUN_CFG : show parsed run settings
+ -S : a synonym for -t -D DUMP_VHOSTS -D DUMP_RUN_CFG
+ -t -D DUMP_MODULES : show all loaded modules
+ -M : a synonym for -t -D DUMP_MODULES
+ -t : run syntax check for config files
+ -T : start without DocumentRoot(s) check
+ -X : debug mode (only one worker, do not detach)
+</pre>
+</div>
+Success! It turns out we can run a linter on a specific config file using the <code>-t</code> flag.
+<h2>Solution</h2>
+<div class="codehilite">
+<pre>root@nuc:/etc/apache2# apache2 -t -f sites-available/git.levlaz.org.conf
+apache2: Syntax error on line 22 of /etc/apache2/sites-available/git.levlaz.org.conf: &lt;/VirtualHost&gt; without matching &lt;VirtualHost&gt; section
+</pre>
+</div>
+Doh! Such a silly mistake with a missing <code>&lt;/VirtualHost&gt;</code> closing bracket. Fixing this syntax error resolved the issue. The main takeaway for me is that the best part about most Linux tools is that they usually give you everything you need in order to succeed. We were able to troubleshoot and resolve this issue without resorting to google and running random commands that stranger posted on the internet 5 years ago.
+
+
+  <div class="more">
+    <p>
+        Thank you for reading! Share your thoughts with me 
+        on <a href="https://bsky.app/profile/levlaz.org"> bluesky</a>, <a href="https://hachyderm.io/@levlaz">mastodon</a>, or via 
+        <a id="email" href="mailto:lev@levlaz.org?subject=Re: your blog post">email</a>. 
+
+	<script>
+		document.getElementById('email').addEventListener('click', function(event) {
+			event.preventDefault();
+			var email = 'lev@levlaz.org';
+			var subject = encodeURIComponent(document.title);
+			var mailToLink = 'mailto:' + email + '?subject=Re: ' + subject;
+
+			window.location.href = mailToLink;
+		});
+	</script>
+    </p>
+    <p>
+        Check out some more stuff to read down below.
+    </p>
+        
+        <p>
+            <b>Most popular posts this month</b>
+        </p>
+        <ul>
+            
+            <li>
+                <a href="/2024/">2024 </a>
+            </li>
+            
+            <li>
+                <a href="/reinstalling-windows-at-1am/">Reinstalling Windows at 1am </a>
+            </li>
+            
+            <li>
+                <a href="/sqlite-db-migrations-with-pragma-user_version/">SQLite DB Migrations with PRAGMA user_version </a>
+            </li>
+            
+            <li>
+                <a href="/my-custom-miniflux-css-theme/">My Custom Miniflux CSS Theme </a>
+            </li>
+            
+            <li>
+                <a href="/how-to-disable-wayland-in-debian-testing/">How to Disable Wayland in Debian Testing </a>
+            </li>
+            
+        </ul>
+        
+        
+        <p><b>Recent Favorite Blog Posts</b></p>
+        <p> This is a collection of the last 8 posts that I bookmarked.</p>
+        <ul>
+            
+            <li>
+                <a href="https://theinternet.review/2025/01/03/25-years-of-the-mac-dock/">25 Years of the Mac OS Dock</a> from The Internet Review
+            </li>
+            
+            <li>
+                <a href="https://charity.wtf/2024/12/17/founder-mode-and-the-art-of-mythmaking/">“Founder Mode” and the Art of Mythmaking</a> from charity.wtf
+            </li>
+            
+            <li>
+                <a href="https://cacm.acm.org/blogcacm/the-rise-of-bluesky/">The Rise of Bluesky</a> from Communications of the ACM
+            </li>
+            
+            <li>
+                <a href="https://thecreativeindependent.com/people/podcaster-dj-and-writer-dj-louie-xiv-on-going-for-it-even-if-youre-terrified/">Podcaster, DJ, and writer DJ Louie XIV on going for it (even if you’re terrified)</a> from The Creative Independent
+            </li>
+            
+            <li>
+                <a href="https://rknight.me/blog/useful-bluesky-tools/">Useful Bluesky Tools</a> from Robb Knight • Posts • Atom Feed
+            </li>
+            
+            <li>
+                <a href="https://cdevroe.com/2024/11/18/re-bluesky/">Re: Bluesky</a> from Colin Devroe
+            </li>
+            
+            <li>
+                <a href="https://www.straphanger.blog/from-the-red-hell-to-the-sky-of-blue/">From the Red Hell to the Sky of Blue</a> from Straphanger
+            </li>
+            
+            <li>
+                <a href="https://sive.rs/salt">We don’t need to use what we make</a> from Derek Sivers blog
+            </li>
+            
+        </ul>
+        
+</div>
+
+  
+<section class="webring">
+  <h3>Articles from blogs I follow around the net</h3>
+  <section class="articles">
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://kevquirk.com/blog/aligning-automattic-s-sponsored-contributions-to-wordpress" target="_blank" rel="noopener">Aligning Automattic’s Sponsored Contributions to WordPress</a>
+      </h4>
+      <p class="summary" dir="auto">
+
+                  
+            
+              Aligning Automattic’s Sponsored Contributions to WordPress
+              by &#34;Automattic&#34; (let&#39;s be honest, it&#39;s Matt Mullenweg)
+              Automattic plan to fuck themselves over further (and by…</p>
+      <small class="source">
+        via <a href="https://kevquirk.com">Kev Quirk</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://www.theintrinsicperspective.com/p/stop-speedrunning-to-a-dystopia" target="_blank" rel="noopener">Stop speedrunning to a dystopia</a>
+      </h4>
+      <p class="summary" dir="auto">We need more warnings about amusing ourselves to death</p>
+      <small class="source">
+        via <a href="https://www.theintrinsicperspective.com">The Intrinsic Perspective</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://bradfrost.com/blog/post/durable-products/" target="_blank" rel="noopener">Durable products</a>
+      </h4>
+      <p class="summary" dir="auto">I wore my Olukai Mahana slippers all day every day for 3 years. They finally got beat up enough that when my family asked me what I wanted for Christmas, I said that I’d welcome a new pair of slippers. […]</p>
+      <small class="source">
+        via <a href="https://bradfrost.com">Blog – Brad Frost</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+  </section>
+  <p class="attribution">
+    Generated by
+    <a href="https://git.sr.ht/~sircmpwn/openring">openring</a>
+  </p>
+</section>
+<style>
+.webring .articles {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+}
+.webring .title {
+  margin: 0;
+}
+.webring .article {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background: #444;
+  min-width: 10rem;
+}
+.webring .summary {
+  font-size: 0.8rem;
+  flex: 1 1 0;
+}
+.webring .attribution {
+  text-align: right;
+  font-size: 0.8rem;
+  color: lightgray;
+}
+</style>
+
+
+  </main>
+  <footer>
+    <p>
+    <a href="mailto:lev@levlaz.org">lev@levlaz.org</a>
+    <br/>
+    <img alt="rss symbol" src="/img/rss.svg" height="10"><a href="/index.xml">rss</a>
+    <br/>
+    <a rel="me" target="_blank" href="https://hachyderm.io/@levlaz">mastodon</a>
+    <br/>
+    <a target="_blank" href="https://github.com/levlaz"> github </a>
+    <br />
+    <a href="/micro"> microblog </a>
+</p>
+
+<p>Having the best day of my life.</p>
+
+<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/">
+    <br>
+    <a property="dct:title" rel="cc:attributionURL" href="https://levlaz.org">levlaz.org</a> &copy; 2004-2025 by <span property="cc:attributionName">Lev Lazinskiy</span> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0</a>
+    <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt="">
+</p> 
+
+<div style="margin-bottom: 25px;">
+    <form method="get" id="ddgSearch" action="https://duckduckgo.com/">
+    <input type="hidden" name="sites" value="levlaz.org"/>
+    <input type="hidden" name="k7" value="#ffffff"/>
+    <input type="hidden" name="k8" value="#222222"/>
+    <input type="hidden" name="k9" value="#00278e"/>
+    <input type="hidden" name="kx" value="#20692b"/>
+    <input type="hidden" name="kj" value="#fafafa"/>
+    <input type="hidden" name="kt" value="p"/>
+    <img style="float:left;padding-right: 5px;" src="/img/ddg.ico" width="22px">
+    <input type="text" name="q" placeholder="Search this site..." aria-label="Search levlaz.org on DuckDuckGo"/>
+    <button type="submit">Search</button>
+</form>
+</div>
+    
+
+  </footer>
+</body>
+</html>

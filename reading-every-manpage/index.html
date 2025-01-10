@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<meta name="fediverse:creator" content="@levlaz@hachyderm.io">
+<title>Reading every manpage | Lev Lazinskiy</title>
+
+      <link rel="stylesheet" href="/css/main.min.cda80e9eae3204fe10a59ea70553dfefd6d644cd217c61c5d1c329cdb374214e.css" integrity="sha256-zagOnq4yBP4QpZ6nBVPf79bWRM0hfGHF0cMpzbN0IU4=" crossorigin="anonymous">
+
+
+      <script src="/js/main.23cd0c7d837263b9eaeb96ee2d9ccfa2969daa3fa00fa1c1fe8701a9b87251a1.js" integrity="sha256-I80MfYNyY7nq65buLZzPopadqj&#43;gD6HB/ocBqbhyUaE=" crossorigin="anonymous"></script>
+
+<script defer data-domain="levlaz.org" src="https://analytics.levlaz.org/js/script.js"></script>
+
+
+</head>
+<body>
+  <div id="rainbow"></div>
+  <header>
+    <h1><a class="logo" href="/">Lev Lazinskiy</a></h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a style="margin-left:10px;" href="/about/">About</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" aria-current="true" class="ancestor" href="/archive/">Archive</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/tags/">Tags</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/now/">Now</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/links/">Links</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/index.xml">Feed</a>
+    </li>
+    </ul>
+  </nav>
+
+
+
+  </header>
+  <main>
+    
+<script defer page-type="blogpost" data-domain="levlaz.org" src="https://plausible.io/js/script.pageview-props.js"></script>
+<h2 style="margin-bottom:0">Reading every manpage</h2>
+
+  <div style="color:grey">
+    
+    
+    <time datetime="2019-12-15T12:44:33-07:00">December 15, 2019</time> |  
+      <a href="/tags/bsd/">bsd</a> |
+      <a href="/tags/learning/">learning</a> |
+
+  </div>
+
+  <p>I want to read every man page in stock OpenBSD. I have no idea why, but I am
+sure that I going to learn something. You can follow along here.</p>
+<p>There is a man page for man which tells us where everything is located
+along with the general top level sections.</p>
+<pre tabindex="0"><code>1         General commands (tools and utilities).
+2         System calls and error numbers.
+3         Library functions.
+3p        perl(1) programmer&#39;s reference guide.
+4         Device drivers.
+5         File formats.
+6         Games.
+7         Miscellaneous information.
+8         System maintenance and operation commands.
+9         Kernel internals.
+</code></pre><h2 id="man1---general-commands">
+  man1 - General Commands
+  <a href="#man1---general-commands">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h2>
+<p>Starting in <code>/usr/share/man/man1</code> in alphabetical order.</p>
+<hr>
+<p>Fri, 6 Dec 2019 21:23:00 -0800</p>
+<h3 id="internals1">
+  Internals.1
+  <a href="#internals1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This page is a part of the Perl Programmers Reference
+Guide, I am bit confused about why its in <code>man1</code> since man tells us
+that all of the perl things are supposed to be in 3p. I asked about this
+on <a href="https://bsd.network/@levlaz/103264244282116565">mastadon</a>.</p>
+<p>I found this little blurb interesting.</p>
+<blockquote>
+<p>In theory these routines were not and are not intended to be used
+outside of the perl core, and are subject to change and removal at any
+time.</p>
+</blockquote>
+<blockquote>
+<p>In practice people have come to depend on these over the years, despite
+being historically undocumented, so we will provide some level of
+forward compatibility for some time.</p>
+</blockquote>
+<h3 id="packaging1">
+  PACKAGING.1
+  <a href="#packaging1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>Another page about Perl Programmers Reference. This short page is a
+reference that documents some best practices in packaging perl itself.</p>
+<h3 id="acme-client1">
+  acme-client.1
+  <a href="#acme-client1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>I&rsquo;ve read this page several times since I&rsquo;ve been using acme-client to
+set up HTTPS on all of my sites. This is the first man page in the list
+that properly reference other man pages. I am fighting the temptation to
+follow the rabbit hole.</p>
+<!-- TODO: read all of the RFCs -->
+<p>I was not aware that ACME is an RFC
+<a href="https://tools.ietf.org/html/rfc8555">8555</a>,
+I missed this part since when I read this page before I tended to skip
+to the parts that I needed. Once I am done here, I am going to go read
+all of the RFC&rsquo;s.</p>
+<h3 id="addr2line1">
+  addr2line.1
+  <a href="#addr2line1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>I am not familiar with this program at all. It is a GNU development tool
+that converts addresses into file names and line numbers. Address in
+this context refers to:</p>
+<blockquote>
+<p>Given an address in an executable or an offset in a section of a
+relocatable object</p>
+</blockquote>
+<p>I read this several times and I am still not 100% sure what an address
+is. I do, however, know what <code>a.out</code> is. The best way to figure out what
+this thing does is to try to use it.</p>
+<p>I made a &ldquo;Hello World&rdquo; program in C, compiled it, and then ran
+<code>addr2line a.out</code> which resulted in this output:</p>
+<pre tabindex="0"><code>stock# addr2line a.out
+??:0
+</code></pre><p>The man page tells us that <code>??:0</code> means that the file name or function</p>
+<p>can not be determined (??) and the line number can also not be
+determined (:0).</p>
+<p>I am still confused. Now I just <em>have</em> to know what the hell this thing
+does. I am temporarily giving up, but I learned at this program is a
+part of GNU binary utilities.</p>
+<h3 id="amd64fdformat1">
+  amd64/fdformat.1
+  <a href="#amd64fdformat1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This command formats floppy disks. I am not sure if anyone has used this
+thing in the last decade, but here it is.</p>
+<h3 id="apply1">
+  apply.1
+  <a href="#apply1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<!-- TODO: use this for real -->
+<p>I have never used this command, but it seems interesting. It allows you
+to &ldquo;apply a command to a set of arguments&rdquo;. At first glace this reminds
+me of <a href="https://docs.python.org/3/library/functions.html#map">python&rsquo;s map
+function</a> and it
+appears to work the same way.</p>
+<hr>
+<p>Sat Dec  7 14:37:23 2019</p>
+<h3 id="apropos1">
+  apropos.1
+  <a href="#apropos1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>I think this is my all time favorite Unix command. <code>apropos</code>
+allows you to search all of the man pages for various
+things. Man pages are very useful, but if you don&rsquo;t even know exactly
+which page you are looking for, this is a great place to start.</p>
+<p>Here I learned that <code>whatis</code> is a synonym for <code>apropos -f</code> (which
+searches for man page names only).</p>
+<p>I also learned that you can use logical operators such as -a (and) and -o
+(or) when writing your search terms. All of my searches with this tool
+have been very basic, so this is great to know.</p>
+<p>You can also use macro keys to perform a deeper search such as searching
+for specific functions.</p>
+<p>One of the most useful sections inside of man pages is the <code>EXAMPLES</code>
+section. I usually just glance over these, but since I am reading these
+with intent I tried out all of the examples here just to see what was
+possible.</p>
+<!-- TODO: research POSIX -->
+<p>This is the first man page that I&rsquo;ve seen to explicitly reference the
+<a href="https://en.wikipedia.org/wiki/POSIX">POSIX specification</a> which is a
+whole other can of worms that I&rsquo;d like to dig into later.</p>
+<h3 id="ar1">
+  ar.1
+  <a href="#ar1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This is another part of the GNU binutils. This program creates,
+modifies, and extracts from archives. I am not exactly sure what the
+difference between <code>ar</code> and <code>tar</code> are, but I&rsquo;ll figure this out a bit
+later.</p>
+<!-- TODO: research ar and provide examples for manpage -->
+<p>Also, there are no EXAMPLES in this man page, and I think it might be
+worth adding some.</p>
+<h3 id="arch1">
+  arch.1
+  <a href="#arch1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This is a handy utility that prints out the architecture type.</p>
+<h3 id="as1">
+  as.1
+  <a href="#as1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<!-- TODO: refresher on compiler, assembler, linker -->
+<p><code>as</code> is the portable GNU assembler, it is also a part of GNU <code>binutils</code>.
+By comparison to other pages so far, this one is pretty meaty. To
+illustrate this point, here what the &ldquo;synopsis&rdquo; looks like.</p>
+<pre tabindex="0"><code>as [-a[cdhlns][=file]] [--alternate] [-D]
+[--defsym sym=val] [-f] [-g] [--gstabs]
+[--gstabs+] [--gdwarf-2] [--help] [-I dir] [-J]
+[-K] [-L] [--listing-lhs-width=NUM]
+[--listing-lhs-width2=NUM] [--listing-rhs-width=NUM]
+[--listing-cont-lines=NUM] [--keep-locals] [-o
+objfile] [-R] [--reduce-memory-overheads] [--statistics]
+[-v] [-version] [--version] [-W] [--warn]
+[--fatal-warnings] [-w] [-x] [-Z] [@FILE]
+[--target-help] [target-options]
+[--|files ...]
+</code></pre><p>In a nutshell:</p>
+<blockquote>
+<p>as is primarily intended to assemble the output of the GNU C compiler
+&ldquo;gcc&rdquo; for use by the linker &ldquo;ld&rdquo;.</p>
+</blockquote>
+<h3 id="at1">
+  at.1
+  <a href="#at1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This is another new command to me. I&rsquo;ve never heard of it, but it
+appears to be related to performing batch processing. This is pretty
+interesting since it allows you to either perform a task at a specific
+time or, even more interestingly, when the system load allows it.</p>
+<!-- TODO: investigate the timespec specification -->
+<p>This appears to somehow be related to cron, but I am not quite sure how
+just yet.</p>
+<p>I got some great feedback about this on
+<a href="https://bsd.network/@guntbert/103347654450991139">Mastadon</a>.</p>
+<blockquote>
+<p>One note: &lsquo;at&rsquo; isn&rsquo;t related to cron at all, it has its own demon: atd , and its purpose is &ldquo;deferred&rdquo; execution - your commands get executed at a specified later time (but just once)</p>
+</blockquote>
+<p>Thank you <a href="https://bsd.network/@guntbert">@guntbert</a> for the comments.</p>
+<h3 id="atq1">
+  atq.1
+  <a href="#atq1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This command is complementary to the previous one, where it displays all
+of the jobs in the <code>at(1)</code> queue.</p>
+<h3 id="atrm1">
+  atrm.1
+  <a href="#atrm1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This command is also complementary to <code>at(1)</code>, it removes jobs from at.</p>
+<h3 id="aucat1">
+  aucat.1
+  <a href="#aucat1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This program seems interesting, it allows you to manipulate audio files.</p>
+<h3 id="audioctl1">
+  audioctl.1
+  <a href="#audioctl1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This is a utility that allows you to work with audio driver variables.</p>
+<h3 id="awk1">
+  awk.1
+  <a href="#awk1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<!-- TODO: Practice and write some real awk -->
+<p>This is a very beefy man page since <code>awk</code> is a programming
+language that is specifically good at &ldquo;pattern-directed scanning and
+processing&rdquo;.</p>
+<p>I&rsquo;ve only ever seen and briefly used awk &ldquo;one-liners&rdquo;, I am looking
+forward to digging in a bit deeper and seeing what I can hack together
+with this powerful language.</p>
+<h3 id="banner1">
+  banner.1
+  <a href="#banner1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This is a fun, random, use-case-less program that prints out strings in
+large letters on a terminal using &ldquo;#&rdquo;.</p>
+<pre tabindex="0"><code>
+ #    #   ####   #    #  ######  ######  #####    ####
+ #    #  #    #  #    #      #   #       #    #  #
+ #    #  #    #  #    #     #    #####   #    #   ####
+ # ## #  #    #  # ## #    #     #       #####        #
+ ##  ##  #    #  ##  ##   #      #       #   #   #    #
+ #    #   ####   #    #  ######  ######  #    #   ####
+</code></pre><hr>
+<p>Sun Dec  8 22:45:24 2019</p>
+<h3 id="basename1">
+  basename.1
+  <a href="#basename1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This is a very handy command, especially when used in a script working
+with files or urls. I&rsquo;ve used this plenty of times, but ultimately it allows you
+to easily find the base name of file.</p>
+<p>For example:</p>
+<pre tabindex="0"><code>$ basename /home/levlaz/blog
+blog
+
+$ basename https://dev.levlaz.org/blurbs/basename.html
+basename.html
+</code></pre><h3 id="bc1">
+  bc.1
+  <a href="#bc1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<!-- TODO: Use this for real. -->
+<p>I&rsquo;ve heard of this program, but never used it. It is an
+&ldquo;arbitrary-precision arithmetic language and calculator&rdquo;.</p>
+<p>The most interesting thing I was the reference to
+the file that defines some common math functions
+<code>/usr/share/misc/bc.library</code> using the bc language
+itself. For example this is what the <code>s(x) sine</code> function looks like:</p>
+<pre tabindex="0"><code>define s(x) {
+	auto a, b, c, s, t, y, p, n, i, r
+	r = ibase
+	ibase = A
+	t = scale
+	y = x/.7853
+	s = t + length(y) - scale(y)
+	if (s &lt; t) s = t
+	scale = s
+	p = a(1)
+
+	scale = 0
+	if (x &gt;= 0) n = (x/(2*p) + 1)/2
+	if (x &lt; 0) n = (x/(2*p) - 1)/2
+	x = x - 4*n*p
+	if (n % 2 != 0) x = -x
+
+	scale = t + length(1.2*t) - scale(1.2*t)
+	y = -x*x
+	a = x
+	b = 1
+	s = x
+	for (i =3 ; 1 == 1; i = i + 2) {
+		a = a*y
+		b = b*i*(i - 1)
+		c = a/b
+		if (c == 0) {
+			scale = t
+			ibase = r
+			return (s/1)
+		}
+		s = s + c
+	}
+}
+</code></pre><p>It is fascinating to see what the algorithm for calculating <code>sin</code> looks
+like.</p>
+<h3 id="biff1">
+  biff.1
+  <a href="#biff1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>Wow.</p>
+<p>People who know me, know that I detest desktop notifications. I was
+surprised and curious to see that this program is essentially that.
+Except it was written a very long time ago (appeared in 4.0BSD) and only
+notifies you about mail (in your terminal session).</p>
+<hr>
+<p>Mon Dec  9 23:37:46 2019</p>
+<h3 id="c1">
+  c++.1
+  <a href="#c1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This is the clang c++ compiler. The man page shown is for clang itself.
+This is a really cool man page because it provides you with some
+interesting insights into how gets compiled, assembled, and linked.</p>
+<p>This program also includes a static analyzer. Similar to other build
+tools there are various stages to turning C++ code into an executable
+binary. The DESCRIPTION of this man page does a wonderful job explaining
+what the process looks like.</p>
+<p>I also learned about <a href="https://en.wikipedia.org/wiki/Objective-C#Objective-C++">Objective C++</a> for the
+very first time thanks to this manpage.</p>
+<!-- TODO: Fix typo in manpage
+https://github.com/llvm/llvm-project/blob/de94ac9357750fdba45e09eefa8f67a650ae6a64/clang/docs/CommandGuide/clang.rst
+-->
+<h3 id="cfilt1">
+  c++filt.1
+  <a href="#cfilt1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This program, also a part of GNU binutils, allows you to &ldquo;demangle&rdquo; C++ and
+Java symbols. This has to do with <a href="https://en.wikipedia.org/wiki/Name_mangling">name mangling</a>.</p>
+<p>Interesting note in this man page.</p>
+<blockquote>
+<p>MS-DOS does not allow &ldquo;+&rdquo; characters in file names, so on MS-DOS this
+program is called CXXFILT.</p>
+</blockquote>
+<h3 id="cal1">
+  cal.1
+  <a href="#cal1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This is a neat program that draws a calendar in your terminal as such:</p>
+<pre tabindex="0"><code>   December 2019
+Su Mo Tu We Th Fr Sa
+ 1  2  3  4  5  6  7
+ 8  9 10 11 12 13 14
+15 16 17 18 19 20 21
+22 23 24 25 26 27 28
+29 30 31            
+</code></pre><p>You can also get the calendar for any previous date. I was born in June
+1988 so I could look at this:</p>
+<pre tabindex="0"><code>asus$ cal 6 1988
+     June 1988
+Su Mo Tu We Th Fr Sa
+          1  2  3  4
+ 5  6  7  8  9 10 11
+12 13 14 15 16 17 18
+19 20 21 22 23 24 25
+26 27 28 29 30      
+</code></pre><h3 id="calendar1">
+  calendar.1
+  <a href="#calendar1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This is a built in reminder service. It looks for a file called calendar
+and shows lines that begin with today&rsquo;s date or tomorrow&rsquo;s. It&rsquo;s pretty
+neat.</p>
+<p>You can add reminders for specific days and there are also a lot of
+built-in calendars which show you interesting information about various
+dates.</p>
+<p>For example you can <code>#include &lt;calendar.openbsd&gt;</code> to see information
+about BSD related events.</p>
+<pre tabindex="0"><code>asus$ head -n 20 /usr/share/calendar/calendar.openbsd 
+/*
+ * OpenBSD-related dates to celebrate
+ *
+ * $OpenBSD: calendar.openbsd,v 1.41 2019/01/30 07:24:53 bentley Exp $
+ */
+
+#ifndef _calendar_openbsd_
+#define _calendar_openbsd_
+
+Jan 06	IPF gets integrated into the OpenBSD kernel, 1996
+Jan 06	NRL IPv6 addition to OpenBSD, 1999
+Jan 09	n2k10: Network hackathon, Melbourne, Australia, 17 developers,
+2010
+Jan 13	n2k13: Network hackathon, Dunedin, New Zealand, 17 developers,
+2013
+Jan 18	n2k14: Mini-hackathon, Dunedin, New Zealand, 15 developers, 2014
+Jan 20	Bind 9 goes into the tree, 2003
+Jan 26	Anoncvs service inaugurated, 1996
+Jan 26	n2k9: Network hackathon, Basel, Switzerland, 19 developers, 2009
+Jan 27	OpenBSD/amd64 port is added, from NetBSD, 2004
+Jan 29	&#34;second anoncvs server is 100 miles from the first&#34;, 1996
+Jan 31	OpenBSD/cats port is added, from NetBSD, 2004
+</code></pre><p>You can browse all of the available local calendars in
+<code>/usr/share/calendar</code></p>
+<hr>
+<p>Wed Dec 11 16:19:23 2019</p>
+<h3 id="cap_mkdb1">
+  cap_mkdb.1
+  <a href="#cap_mkdb1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>I am not 100% sure what this does or what it is used for. The man page
+tells us that it is used to &ldquo;create capability database&rdquo;. I am not sure
+what capability this is referring to, but its somehow related to
+cgetent(3), dbopen(3), and termcap(5). I am sure I will learn more once
+I get to those sections.</p>
+<h3 id="captoinfo1">
+  captoinfo.1
+  <a href="#captoinfo1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This converts <code>termcap</code> to <code>terminfo</code>. Running this command by itself
+will spit out a bunch of output related to the capabilities of your
+terminal. Other fun facts: This program was written by the legendary
+<a href="http://www.catb.org/esr/">Eric S. Raymond</a>.</p>
+<h3 id="cat1">
+  cat.1
+  <a href="#cat1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>Everyone knows good old cat.</p>
+<h3 id="cc1">
+  cc.1
+  <a href="#cc1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>C compiler. This shows the same manpage as <code>c++.1</code>.</p>
+<hr>
+<p>Sun, 22 Dec 2019 16:38:38 -0800</p>
+<h3 id="cdio1">
+  cdio.1
+  <a href="#cdio1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This program helps you to work with compact discs. If you are reading
+this in the future, compact discs were round plastic things that would
+have data etched on with a laser that could then be read by a different
+laser. They made a funny sound when inserted into a computer.</p>
+<h3 id="check-lib-depends1">
+  check-lib-depends.1
+  <a href="#check-lib-depends1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This is a tool for working with
+<a href="https://www.openbsd.org/faq/ports/index.html">ports</a>. This tool will
+scan binaries to extract libraries and then compare them against the
+ports registered dependencies.</p>
+<p>I found a typo in this page, and sent
+along <a href="https://marc.info/?l=openbsd-tech&amp;m=157706500107487&amp;w=2">my first patch</a> to
+OpenBSD.</p>
+<h3 id="chflags1">
+  chflags.1
+  <a href="#chflags1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This is a utility that allows you to modify file flags. I have never had
+to deal with flags before in a real world, but it looks like these
+impose additional restrictions. Some interesting use cases could be
+setting the <code>nodump</code> flag which would prevent any files with this
+flag from being backed up during a <code>dump(8)</code> backup.</p>
+<h3 id="chgrp1">
+  chgrp.1
+  <a href="#chgrp1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This command allows you to change the group information for files.</p>
+<h3 id="chio1">
+  chio.1
+  <a href="#chio1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This is a &ldquo;medium changer control utility&rdquo;. In this context, a &ldquo;medium
+changer&rdquo; refers to things that can be found in:</p>
+<blockquote>
+<p>tape and optical disk jukeboxes.</p>
+</blockquote>
+<p>In my mind, I am picturing the CD changer that I had in my mini-van in
+2005. Who knew that I could control it with a unix command!</p>
+<h3 id="chmod1">
+  chmod.1
+  <a href="#chmod1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This is a pretty familiar command. It is used to change file modes, I
+just now realized that is probably why it is called &ldquo;chmod&rdquo; since the
+&ldquo;mod&rdquo; part refers to modes. This is a great page to read to familiarize
+yourself with all of the various options that exist for files. I think
+that 50% of the troubleshooting that I&rsquo;ve ever done related to unix
+issues have been directly related to the file modes.</p>
+<p>This page also provides a great overview of absolute vs. symbolic modes.</p>
+<h3 id="chpass1">
+  chpass.1
+  <a href="#chpass1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This command allows you to change user database information. When you
+are creating a new user with <code>adduser</code> it tells you not to worry because
+you can make changes later. This is the command that allows you to make
+those changes.</p>
+<p>There is an interesting reference in the <em>SEE ALSO</em> section which refers
+to a paper written by Robert Morris and Ken Thompson in 1979 which
+describes the history of the design of a password system. You can read
+this paper <a href="http://passwordresearch.com/papers/paper41.html">here</a>. It
+is a fascinating peek into the early design of unix systems.</p>
+<h3 id="ci1">
+  ci.1
+  <a href="#ci1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>No, this is not a built-in continuous integration system. Instead this
+command is a part of the rcs(1) program, and specifically allows you to
+check in a revision. RCS is a revision control system (think git, cvs,
+svn) which allows you to keep track of changes. The origins of this
+program date back to the 1980s.</p>
+<p>It looks like the main difference between rcs and more modern version
+control systems is that rcs is intended to work at the individual file
+level, while other tools are able to keep track of entire directories.</p>
+<p>This specific command highlights the limitations of trying to read every
+man page in alphabetical order, since you tend to read things out of
+order. I am resisting the urge to follow the breadcrumbs to the rest of
+the system too early.</p>
+<hr>
+<p>Thu, 26 Dec 2019 18:24:33 -0800</p>
+<h3 id="cksum1">
+  cksum.1
+  <a href="#cksum1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This program can be used to display file checksums and block counts.
+This manpage refers to CRC, which I was not familiar with. I looked it
+up and it looks like <a href="https://en.wikipedia.org/wiki/Cyclic_redundancy_check">Cyclic Redundancy
+Check</a>(CRC) is an
+algorithm that can be used to detect changes to raw data.</p>
+<p>There is another article referenced here where the pseudo-code in the
+article is being implemented in the default calculation that is done by
+cksum. You can read the <a href="https://dl.acm.org/citation.cfm?doid=63030.63037">full paper
+here</a> if you have
+access to the ACM digital library, or
+<a href="https://sci-hub.tw/10.1145/63030.63037">here</a> if you don&rsquo;t.</p>
+<h3 id="clang-local1">
+  clang-local.1
+  <a href="#clang-local1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This manual describes the OpenBSD specific behavior of the LLVM/clang
+compiler. Many of the security-focused enhancements that OpenBSD is
+known for are described here.</p>
+<h3 id="clang1">
+  clang.1
+  <a href="#clang1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This is the same man page that we have seen before with <code>cc(1)</code> and
+<code>c++(1)</code>.</p>
+<h3 id="clean-old-distfiles1">
+  clean-old-distfiles.1
+  <a href="#clean-old-distfiles1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This is a BSD ports specific utility that is used to clean up old
+distfiles.</p>
+<h3 id="cmp1">
+  cmp.1
+  <a href="#cmp1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This is a utility that can be used to compare two files. This is not
+necessarily a diff, but rather can be used to check to see if two files
+are the same or not.</p>
+<h3 id="co1">
+  co.1
+  <a href="#co1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This is the opposite of our friend <code>ci(1)</code> that we met earlier. This can
+be used to check out an <code>rcs(1)</code> revision.</p>
+<h3 id="col1">
+  col.1
+  <a href="#col1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>I read this page, and I have no idea what this program does. It says
+that it &ldquo;filters out reverse line feeds so that the output is in the
+correct order&hellip;&rdquo; I am not sure what a reverse line feed is, which is
+likely the root of my confusion.</p>
+<h3 id="colrm1">
+  colrm.1
+  <a href="#colrm1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This program can be used to removed columns from a file.</p>
+<h3 id="column1">
+  column.1
+  <a href="#column1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This program can be used to format input into multiple columns.</p>
+<p>I really wish that col, colrm, and column all had some real world
+examples in the man page.</p>
+<h3 id="comm1">
+  comm.1
+  <a href="#comm1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This command is in the <code>diff(1)</code> and <code>cmp(1)</code> family, it allows you to
+read two files and see which lines exist in the first, second, and both
+files.</p>
+<h3 id="compress1">
+  compress.1
+  <a href="#compress1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This utility allows you to compress and expand data using <a href="https://www.semanticscholar.org/paper/A-universal-algorithm-for-sequential-data-Ziv-Lempel/59c9f2036e673d8bc9713eed851d12c6c9fe53cb">adaptive
+Lempel-Ziv
+coding</a>.</p>
+<h3 id="corelist1">
+  corelist.1
+  <a href="#corelist1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This is a part of the Perl Programmers Reference Guide, it arguably
+<a href="https://bsd.network/@levlaz/103264244282116565">does not belong</a> in
+this section.</p>
+<p>This is a pretty neat utility because it tells you when a specific
+module first appeared in Perl.</p>
+<h3 id="cp1">
+  cp.1
+  <a href="#cp1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>Like <code>cat(1)</code> this has likely been used by every human who has ever
+logged into a unix shell. This command allows you to copy files.</p>
+<h3 id="cpan1">
+  cpan.1
+  <a href="#cpan1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This command is also a part of the Perl Programmers reference. This
+allows you to interact with <a href="https://www.cpan.org/SITES.html">CPAN</a>, the
+comprehensive perl archive network, over the command line.</p>
+<h3 id="cpio1">
+  cpio.1
+  <a href="#cpio1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This program allows you to copy file archives. This is in the same
+family as <code>tar(1)</code>.</p>
+<h3 id="cpp1">
+  cpp.1
+  <a href="#cpp1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>Same as <code>c++(1)</code>.</p>
+<h3 id="crontab1">
+  crontab.1
+  <a href="#crontab1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>This command is used to install, remove, or list the tables for
+<code>cron(8)</code>. Cron can be used to schedule commands to run. I&rsquo;ve used cron
+quite a bit in my life so far. It can be a little bit tricky since some
+of the environment settings that exist when you are in an interactive
+shell session are not available to a cron job. I think we will learn
+more about this when we read about <code>cron(8)</code> itself.</p>
+<h3 id="csh1">
+  csh.1
+  <a href="#csh1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h3>
+<p>csh is a shell. It was one of the first shells to implement history,
+jobs, and file name completion. Compared to sh, it uses a C-like syntax
+which might make it a bit easier to grok various scripts.</p>
+<p>This is one of the longest man pages I&rsquo;ve read so far, since it
+described in great detail every aspect of this shell for the purposes of
+using it interactively  or using it as an interpreter.</p>
+<p>Some other interesting facts, this shell was written by <a href="https://en.wikipedia.org/wiki/Bill_Joy">Bill
+Joy</a> who was a co-founder of Sun
+Microsystems. He also created the vi editor, and more or less began the
+distribution of BSD.</p>
+
+
+  <div class="more">
+    <p>
+        Thank you for reading! Share your thoughts with me 
+        on <a href="https://bsky.app/profile/levlaz.org"> bluesky</a>, <a href="https://hachyderm.io/@levlaz">mastodon</a>, or via 
+        <a id="email" href="mailto:lev@levlaz.org?subject=Re: your blog post">email</a>. 
+
+	<script>
+		document.getElementById('email').addEventListener('click', function(event) {
+			event.preventDefault();
+			var email = 'lev@levlaz.org';
+			var subject = encodeURIComponent(document.title);
+			var mailToLink = 'mailto:' + email + '?subject=Re: ' + subject;
+
+			window.location.href = mailToLink;
+		});
+	</script>
+    </p>
+    <p>
+        Check out some more stuff to read down below.
+    </p>
+        
+        <p>
+            <b>Most popular posts this month</b>
+        </p>
+        <ul>
+            
+            <li>
+                <a href="/2024/">2024 </a>
+            </li>
+            
+            <li>
+                <a href="/reinstalling-windows-at-1am/">Reinstalling Windows at 1am </a>
+            </li>
+            
+            <li>
+                <a href="/sqlite-db-migrations-with-pragma-user_version/">SQLite DB Migrations with PRAGMA user_version </a>
+            </li>
+            
+            <li>
+                <a href="/my-custom-miniflux-css-theme/">My Custom Miniflux CSS Theme </a>
+            </li>
+            
+            <li>
+                <a href="/how-to-disable-wayland-in-debian-testing/">How to Disable Wayland in Debian Testing </a>
+            </li>
+            
+        </ul>
+        
+        
+        <p><b>Recent Favorite Blog Posts</b></p>
+        <p> This is a collection of the last 8 posts that I bookmarked.</p>
+        <ul>
+            
+            <li>
+                <a href="https://theinternet.review/2025/01/03/25-years-of-the-mac-dock/">25 Years of the Mac OS Dock</a> from The Internet Review
+            </li>
+            
+            <li>
+                <a href="https://charity.wtf/2024/12/17/founder-mode-and-the-art-of-mythmaking/">“Founder Mode” and the Art of Mythmaking</a> from charity.wtf
+            </li>
+            
+            <li>
+                <a href="https://cacm.acm.org/blogcacm/the-rise-of-bluesky/">The Rise of Bluesky</a> from Communications of the ACM
+            </li>
+            
+            <li>
+                <a href="https://thecreativeindependent.com/people/podcaster-dj-and-writer-dj-louie-xiv-on-going-for-it-even-if-youre-terrified/">Podcaster, DJ, and writer DJ Louie XIV on going for it (even if you’re terrified)</a> from The Creative Independent
+            </li>
+            
+            <li>
+                <a href="https://rknight.me/blog/useful-bluesky-tools/">Useful Bluesky Tools</a> from Robb Knight • Posts • Atom Feed
+            </li>
+            
+            <li>
+                <a href="https://cdevroe.com/2024/11/18/re-bluesky/">Re: Bluesky</a> from Colin Devroe
+            </li>
+            
+            <li>
+                <a href="https://www.straphanger.blog/from-the-red-hell-to-the-sky-of-blue/">From the Red Hell to the Sky of Blue</a> from Straphanger
+            </li>
+            
+            <li>
+                <a href="https://sive.rs/salt">We don’t need to use what we make</a> from Derek Sivers blog
+            </li>
+            
+        </ul>
+        
+</div>
+
+  
+<section class="webring">
+  <h3>Articles from blogs I follow around the net</h3>
+  <section class="articles">
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://kevquirk.com/blog/aligning-automattic-s-sponsored-contributions-to-wordpress" target="_blank" rel="noopener">Aligning Automattic’s Sponsored Contributions to WordPress</a>
+      </h4>
+      <p class="summary" dir="auto">
+
+                  
+            
+              Aligning Automattic’s Sponsored Contributions to WordPress
+              by &#34;Automattic&#34; (let&#39;s be honest, it&#39;s Matt Mullenweg)
+              Automattic plan to fuck themselves over further (and by…</p>
+      <small class="source">
+        via <a href="https://kevquirk.com">Kev Quirk</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://www.theintrinsicperspective.com/p/stop-speedrunning-to-a-dystopia" target="_blank" rel="noopener">Stop speedrunning to a dystopia</a>
+      </h4>
+      <p class="summary" dir="auto">We need more warnings about amusing ourselves to death</p>
+      <small class="source">
+        via <a href="https://www.theintrinsicperspective.com">The Intrinsic Perspective</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://bradfrost.com/blog/post/durable-products/" target="_blank" rel="noopener">Durable products</a>
+      </h4>
+      <p class="summary" dir="auto">I wore my Olukai Mahana slippers all day every day for 3 years. They finally got beat up enough that when my family asked me what I wanted for Christmas, I said that I’d welcome a new pair of slippers. […]</p>
+      <small class="source">
+        via <a href="https://bradfrost.com">Blog – Brad Frost</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+  </section>
+  <p class="attribution">
+    Generated by
+    <a href="https://git.sr.ht/~sircmpwn/openring">openring</a>
+  </p>
+</section>
+<style>
+.webring .articles {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+}
+.webring .title {
+  margin: 0;
+}
+.webring .article {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background: #444;
+  min-width: 10rem;
+}
+.webring .summary {
+  font-size: 0.8rem;
+  flex: 1 1 0;
+}
+.webring .attribution {
+  text-align: right;
+  font-size: 0.8rem;
+  color: lightgray;
+}
+</style>
+
+
+  </main>
+  <footer>
+    <p>
+    <a href="mailto:lev@levlaz.org">lev@levlaz.org</a>
+    <br/>
+    <img alt="rss symbol" src="/img/rss.svg" height="10"><a href="/index.xml">rss</a>
+    <br/>
+    <a rel="me" target="_blank" href="https://hachyderm.io/@levlaz">mastodon</a>
+    <br/>
+    <a target="_blank" href="https://github.com/levlaz"> github </a>
+    <br />
+    <a href="/micro"> microblog </a>
+</p>
+
+<p>Having the best day of my life.</p>
+
+<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/">
+    <br>
+    <a property="dct:title" rel="cc:attributionURL" href="https://levlaz.org">levlaz.org</a> &copy; 2004-2025 by <span property="cc:attributionName">Lev Lazinskiy</span> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0</a>
+    <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt="">
+</p> 
+
+<div style="margin-bottom: 25px;">
+    <form method="get" id="ddgSearch" action="https://duckduckgo.com/">
+    <input type="hidden" name="sites" value="levlaz.org"/>
+    <input type="hidden" name="k7" value="#ffffff"/>
+    <input type="hidden" name="k8" value="#222222"/>
+    <input type="hidden" name="k9" value="#00278e"/>
+    <input type="hidden" name="kx" value="#20692b"/>
+    <input type="hidden" name="kj" value="#fafafa"/>
+    <input type="hidden" name="kt" value="p"/>
+    <img style="float:left;padding-right: 5px;" src="/img/ddg.ico" width="22px">
+    <input type="text" name="q" placeholder="Search this site..." aria-label="Search levlaz.org on DuckDuckGo"/>
+    <button type="submit">Search</button>
+</form>
+</div>
+    
+
+  </footer>
+</body>
+</html>

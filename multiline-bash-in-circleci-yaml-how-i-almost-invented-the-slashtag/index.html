@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<meta name="fediverse:creator" content="@levlaz@hachyderm.io">
+<title>Multiline Bash in CircleCI YAML: How I almost invented the slashtag | Lev Lazinskiy</title>
+
+      <link rel="stylesheet" href="/css/main.min.cda80e9eae3204fe10a59ea70553dfefd6d644cd217c61c5d1c329cdb374214e.css" integrity="sha256-zagOnq4yBP4QpZ6nBVPf79bWRM0hfGHF0cMpzbN0IU4=" crossorigin="anonymous">
+
+
+      <script src="/js/main.23cd0c7d837263b9eaeb96ee2d9ccfa2969daa3fa00fa1c1fe8701a9b87251a1.js" integrity="sha256-I80MfYNyY7nq65buLZzPopadqj&#43;gD6HB/ocBqbhyUaE=" crossorigin="anonymous"></script>
+
+<script defer data-domain="levlaz.org" src="https://analytics.levlaz.org/js/script.js"></script>
+
+
+</head>
+<body>
+  <div id="rainbow"></div>
+  <header>
+    <h1><a class="logo" href="/">Lev Lazinskiy</a></h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a style="margin-left:10px;" href="/about/">About</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" aria-current="true" class="ancestor" href="/archive/">Archive</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/tags/">Tags</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/now/">Now</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/links/">Links</a>
+    </li>
+    <li>
+      <a style="margin-left:10px;" href="/index.xml">Feed</a>
+    </li>
+    </ul>
+  </nav>
+
+
+
+  </header>
+  <main>
+    
+<script defer page-type="blogpost" data-domain="levlaz.org" src="https://plausible.io/js/script.pageview-props.js"></script>
+<h2 style="margin-bottom:0">Multiline Bash in CircleCI YAML: How I almost invented the slashtag</h2>
+
+  <div style="color:grey">
+    
+    
+    <time datetime="2024-04-06T13:01:22-04:00">April 6, 2024</time> |  
+      <a href="/tags/circleci/">circleci</a> |
+      <a href="/tags/dagger/">dagger</a> |
+      <a href="/tags/yaml/">yaml</a> |
+
+  </div>
+
+  <p><strong>Warning this post contains a lot of YAML</strong></p>
+<p>We talk a lot about <a href="https://dagger.io/blog/airbyte-use-case">push and pray</a> at
+Dagger but I spent the better part of the last few days saying every prayer I
+know trying to get my CircleCI config to work properly with multi-line bash
+commands inside of a single YAML block.</p>
+<p>It was particularly painful because this was for a job that only runs on git tags
+and I was trying to publish a new release, so every time it didn&rsquo;t work I had to
+remove the git tag, make the tweak to the yaml file, and then push the same tag back out.</p>
+<p>I had to look it up, but the steps to remove a remote and local tag are:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git tag -d <span style="color:#ff5c57">$TAG</span>
+</span></span><span style="display:flex;"><span>git push origin --delete <span style="color:#ff5c57">$TAG</span>
+</span></span></code></pre></div><p>Then do some work, commit it, rebase it, tag it, and force push it out again.</p>
+<p>If this was for a project that actually mattered, I think it would have been much
+more painful because I would not have rebased and force pushed and instead I would
+have had at least 6 new patch versions of my program with the CI config file being
+the only thing that changes.</p>
+<h2 id="what-i-was-trying-to-do">
+  What I was trying to do
+  <a href="#what-i-was-trying-to-do">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h2>
+<p>A few weeks ago I published a <a href="https://daggerverse.dev/mod/github.com/levlaz/daggerverse/mastodon@a46591542fa07c3f2b607a58fc99a69c64bbe2bd">mastodon module</a> that sends a toot out
+every time I release a new tagged version of a dagger module in my <a href="https://github.com/levlaz/daggerverse">daggerverse repo</a>. This takes advantage of CircleCI tag filtering to
+only execute this job when I have a git tag.</p>
+<p>This function calls my dagger module with a bunch of parameters and I wanted
+to split them out into multiple lines so that its easier to read.</p>
+<p>The first version that I tried did work, but it did not allow me to add the <code>#</code>
+symbol because bash (or yaml) was treating this as a comment and breaking. Since I was
+trying to add the <code>#dagger</code> tag to my toots this needed to be fixed. I was able
+to get it to work by escaping the tag with <code>\#dagger</code>. This kind of worked, but
+the escape symbol was not escaped, so my toots <a href="https://hachyderm.io/@levlaz/112202712856462767">looked a bit weird</a>.</p>
+<p><strong>works</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff6ac1">command</span>: dagger -m github.com/levlaz/daggerverse/mastodon call toot
+</span></span><span style="display:flex;"><span>    --server=&#34;https://hachyderm.io&#34;
+</span></span><span style="display:flex;"><span>    --client-id=&#34;-3UXCeKKYu3U1z2ZANnONS-Artc-WbMuMRKOuSvzuiI&#34;
+</span></span><span style="display:flex;"><span>    --client-secret=env:MASTODON_CLIENT_SECRET
+</span></span><span style="display:flex;"><span>    --access-token=env:MASTODON_ACCESS_TOKEN
+</span></span><span style="display:flex;"><span>    --msg=&#34;I just published a new version of a Dagger module, $CIRCLE_TAG, check it out! https://github.com/levlaz/daggerverse&#34;
+</span></span></code></pre></div><p><strong>breaks because # is not escaped</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff6ac1">command</span>: dagger -m github.com/levlaz/daggerverse/mastodon call toot
+</span></span><span style="display:flex;"><span>    --server=&#34;https://hachyderm.io&#34;
+</span></span><span style="display:flex;"><span>    --client-id=&#34;-3UXCeKKYu3U1z2ZANnONS-Artc-WbMuMRKOuSvzuiI&#34;
+</span></span><span style="display:flex;"><span>    --client-secret=env:MASTODON_CLIENT_SECRET
+</span></span><span style="display:flex;"><span>    --access-token=env:MASTODON_ACCESS_TOKEN
+</span></span><span style="display:flex;"><span>    --msg=&#34;I just published a new version of a <span style="color:#78787e">#dagger module, $CIRCLE_TAG, check it out! https://github.com/levlaz/daggerverse&#34;</span>
+</span></span></code></pre></div><p><strong>works but /# is not escaped</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff6ac1">command</span>: dagger -m github.com/levlaz/daggerverse/mastodon call toot
+</span></span><span style="display:flex;"><span>    --server=&#34;https://hachyderm.io&#34;
+</span></span><span style="display:flex;"><span>    --client-id=&#34;-3UXCeKKYu3U1z2ZANnONS-Artc-WbMuMRKOuSvzuiI&#34;
+</span></span><span style="display:flex;"><span>    --client-secret=env:MASTODON_CLIENT_SECRET
+</span></span><span style="display:flex;"><span>    --access-token=env:MASTODON_ACCESS_TOKEN
+</span></span><span style="display:flex;"><span>    --msg=&#34;I just published a new version of a /#dagger module, $CIRCLE_TAG, check it out! https://github.com/levlaz/daggerverse&#34;
+</span></span></code></pre></div><h2 id="what-didnt-work">
+  What didn&rsquo;t work
+  <a href="#what-didnt-work">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h2>
+<p>Then I remembered something about the <code>|</code> symbol allowing to do more stuff so I
+tried that. This didn&rsquo;t work because my module kept complaining that I was not passing
+any parameters.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff6ac1">command</span>: |<span style="color:#5af78e">
+</span></span></span><span style="display:flex;"><span><span style="color:#5af78e">    dagger -m github.com/levlaz/daggerverse/mastodon call toot
+</span></span></span><span style="display:flex;"><span><span style="color:#5af78e">        --server=&#34;https://hachyderm.io&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#5af78e">        --client-id=&#34;-3UXCeKKYu3U1z2ZANnONS-Artc-WbMuMRKOuSvzuiI&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#5af78e">        --client-secret=env:MASTODON_CLIENT_SECRET
+</span></span></span><span style="display:flex;"><span><span style="color:#5af78e">        --access-token=env:MASTODON_ACCESS_TOKEN
+</span></span></span><span style="display:flex;"><span><span style="color:#5af78e">        --msg=&#34;I just published a new version of a /#dagger module, $CIRCLE_TAG, check it out! https://github.com/levlaz/daggerverse&#34;</span>    
+</span></span></code></pre></div><p>Next, I remembered that maybe I needed to escape them somehow so I added some
+escape symbols. I could not find any info on how to do this in the docs, but
+<a href="https://stackoverflow.com/questions/51672067/circleci-run-multi-line-command">this SO post gave me a hint</a> about using double slashes, so I tried that.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff6ac1">command</span>: |<span style="color:#5af78e">
+</span></span></span><span style="display:flex;"><span><span style="color:#5af78e">    dagger -m github.com/levlaz/daggerverse/mastodon call toot \\
+</span></span></span><span style="display:flex;"><span><span style="color:#5af78e">        --server=&#34;https://hachyderm.io&#34; \\
+</span></span></span><span style="display:flex;"><span><span style="color:#5af78e">        --client-id=&#34;-3UXCeKKYu3U1z2ZANnONS-Artc-WbMuMRKOuSvzuiI&#34; \\
+</span></span></span><span style="display:flex;"><span><span style="color:#5af78e">        --client-secret=env:MASTODON_CLIENT_SECRET \\
+</span></span></span><span style="display:flex;"><span><span style="color:#5af78e">        --access-token=env:MASTODON_ACCESS_TOKEN \\
+</span></span></span><span style="display:flex;"><span><span style="color:#5af78e">        --msg=&#34;I just published a new version of a /#dagger module, $CIRCLE_TAG, check it out! https://github.com/levlaz/daggerverse&#34;</span>    
+</span></span></code></pre></div><p>This did not work, it still complained about not passing parameters. Then I tried
+single slashes. No luck. Then I tried to run the command locally and it worked just
+fine. I was completely lost and now we were in our 5th iteration of doing the force
+push rebase tag prayer.</p>
+<h2 id="what-did-work">
+  What did work
+  <a href="#what-did-work">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+      <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+      <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+    </svg>
+  </a>
+</h2>
+<p>After staring at my screen for a bit, I decided to try one last thing before
+just accepting that all of my toots were going to have <code>\#</code> in them, perhaps I could
+have started a new trend! Slashtag?</p>
+<p>I decided to remove all the extra indentation on the subsequent parts of the command.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff6ac1">command</span>: |<span style="color:#5af78e">
+</span></span></span><span style="display:flex;"><span><span style="color:#5af78e">    dagger -m github.com/levlaz/daggerverse/mastodon call toot \
+</span></span></span><span style="display:flex;"><span><span style="color:#5af78e">    --server=&#34;https://hachyderm.io&#34; \
+</span></span></span><span style="display:flex;"><span><span style="color:#5af78e">    --client-id=&#34;-3UXCeKKYu3U1z2ZANnONS-Artc-WbMuMRKOuSvzuiI&#34; \
+</span></span></span><span style="display:flex;"><span><span style="color:#5af78e">    --client-secret=env:MASTODON_CLIENT_SECRET \
+</span></span></span><span style="display:flex;"><span><span style="color:#5af78e">    --access-token=env:MASTODON_ACCESS_TOKEN \
+</span></span></span><span style="display:flex;"><span><span style="color:#5af78e">    --msg=&#34;I just published a new version of a #dagger module, $CIRCLE_TAG, check it out! https://github.com/levlaz/daggerverse/releases/tag/$CIRCLE_TAG&#34;</span>    
+</span></span></code></pre></div><p>This worked! And I still have no idea why. Its possible I am just
+stupid, but I have no idea what the combination of bash, yaml, and the
+CircleCI engine actually wants from me.</p>
+<p>I&rsquo;m dreaming of a world where no one has to deal with this yaml hell anymore.
+We&rsquo;re halfway there, and if you <a href="https://hachyderm.io/@levlaz">follow me on mastodon</a>
+you&rsquo;ll be the first to hear about it, without the slashtag.</p>
+
+
+  <div class="more">
+    <p>
+        Thank you for reading! Share your thoughts with me 
+        on <a href="https://bsky.app/profile/levlaz.org"> bluesky</a>, <a href="https://hachyderm.io/@levlaz">mastodon</a>, or via 
+        <a id="email" href="mailto:lev@levlaz.org?subject=Re: your blog post">email</a>. 
+
+	<script>
+		document.getElementById('email').addEventListener('click', function(event) {
+			event.preventDefault();
+			var email = 'lev@levlaz.org';
+			var subject = encodeURIComponent(document.title);
+			var mailToLink = 'mailto:' + email + '?subject=Re: ' + subject;
+
+			window.location.href = mailToLink;
+		});
+	</script>
+    </p>
+    <p>
+        Check out some more stuff to read down below.
+    </p>
+        
+        <p>
+            <b>Most popular posts this month</b>
+        </p>
+        <ul>
+            
+            <li>
+                <a href="/2024/">2024 </a>
+            </li>
+            
+            <li>
+                <a href="/reinstalling-windows-at-1am/">Reinstalling Windows at 1am </a>
+            </li>
+            
+            <li>
+                <a href="/sqlite-db-migrations-with-pragma-user_version/">SQLite DB Migrations with PRAGMA user_version </a>
+            </li>
+            
+            <li>
+                <a href="/my-custom-miniflux-css-theme/">My Custom Miniflux CSS Theme </a>
+            </li>
+            
+            <li>
+                <a href="/how-to-disable-wayland-in-debian-testing/">How to Disable Wayland in Debian Testing </a>
+            </li>
+            
+        </ul>
+        
+        
+        <p><b>Recent Favorite Blog Posts</b></p>
+        <p> This is a collection of the last 8 posts that I bookmarked.</p>
+        <ul>
+            
+            <li>
+                <a href="https://theinternet.review/2025/01/03/25-years-of-the-mac-dock/">25 Years of the Mac OS Dock</a> from The Internet Review
+            </li>
+            
+            <li>
+                <a href="https://charity.wtf/2024/12/17/founder-mode-and-the-art-of-mythmaking/">“Founder Mode” and the Art of Mythmaking</a> from charity.wtf
+            </li>
+            
+            <li>
+                <a href="https://cacm.acm.org/blogcacm/the-rise-of-bluesky/">The Rise of Bluesky</a> from Communications of the ACM
+            </li>
+            
+            <li>
+                <a href="https://thecreativeindependent.com/people/podcaster-dj-and-writer-dj-louie-xiv-on-going-for-it-even-if-youre-terrified/">Podcaster, DJ, and writer DJ Louie XIV on going for it (even if you’re terrified)</a> from The Creative Independent
+            </li>
+            
+            <li>
+                <a href="https://rknight.me/blog/useful-bluesky-tools/">Useful Bluesky Tools</a> from Robb Knight • Posts • Atom Feed
+            </li>
+            
+            <li>
+                <a href="https://cdevroe.com/2024/11/18/re-bluesky/">Re: Bluesky</a> from Colin Devroe
+            </li>
+            
+            <li>
+                <a href="https://www.straphanger.blog/from-the-red-hell-to-the-sky-of-blue/">From the Red Hell to the Sky of Blue</a> from Straphanger
+            </li>
+            
+            <li>
+                <a href="https://sive.rs/salt">We don’t need to use what we make</a> from Derek Sivers blog
+            </li>
+            
+        </ul>
+        
+</div>
+
+  
+<section class="webring">
+  <h3>Articles from blogs I follow around the net</h3>
+  <section class="articles">
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://kevquirk.com/blog/aligning-automattic-s-sponsored-contributions-to-wordpress" target="_blank" rel="noopener">Aligning Automattic’s Sponsored Contributions to WordPress</a>
+      </h4>
+      <p class="summary" dir="auto">
+
+                  
+            
+              Aligning Automattic’s Sponsored Contributions to WordPress
+              by &#34;Automattic&#34; (let&#39;s be honest, it&#39;s Matt Mullenweg)
+              Automattic plan to fuck themselves over further (and by…</p>
+      <small class="source">
+        via <a href="https://kevquirk.com">Kev Quirk</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://www.theintrinsicperspective.com/p/stop-speedrunning-to-a-dystopia" target="_blank" rel="noopener">Stop speedrunning to a dystopia</a>
+      </h4>
+      <p class="summary" dir="auto">We need more warnings about amusing ourselves to death</p>
+      <small class="source">
+        via <a href="https://www.theintrinsicperspective.com">The Intrinsic Perspective</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://bradfrost.com/blog/post/durable-products/" target="_blank" rel="noopener">Durable products</a>
+      </h4>
+      <p class="summary" dir="auto">I wore my Olukai Mahana slippers all day every day for 3 years. They finally got beat up enough that when my family asked me what I wanted for Christmas, I said that I’d welcome a new pair of slippers. […]</p>
+      <small class="source">
+        via <a href="https://bradfrost.com">Blog – Brad Frost</a>
+      </small>
+      <small class="date">January 10, 2025</small>
+    </div>
+    
+  </section>
+  <p class="attribution">
+    Generated by
+    <a href="https://git.sr.ht/~sircmpwn/openring">openring</a>
+  </p>
+</section>
+<style>
+.webring .articles {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+}
+.webring .title {
+  margin: 0;
+}
+.webring .article {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background: #444;
+  min-width: 10rem;
+}
+.webring .summary {
+  font-size: 0.8rem;
+  flex: 1 1 0;
+}
+.webring .attribution {
+  text-align: right;
+  font-size: 0.8rem;
+  color: lightgray;
+}
+</style>
+
+
+  </main>
+  <footer>
+    <p>
+    <a href="mailto:lev@levlaz.org">lev@levlaz.org</a>
+    <br/>
+    <img alt="rss symbol" src="/img/rss.svg" height="10"><a href="/index.xml">rss</a>
+    <br/>
+    <a rel="me" target="_blank" href="https://hachyderm.io/@levlaz">mastodon</a>
+    <br/>
+    <a target="_blank" href="https://github.com/levlaz"> github </a>
+    <br />
+    <a href="/micro"> microblog </a>
+</p>
+
+<p>Having the best day of my life.</p>
+
+<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/">
+    <br>
+    <a property="dct:title" rel="cc:attributionURL" href="https://levlaz.org">levlaz.org</a> &copy; 2004-2025 by <span property="cc:attributionName">Lev Lazinskiy</span> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0</a>
+    <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt="">
+</p> 
+
+<div style="margin-bottom: 25px;">
+    <form method="get" id="ddgSearch" action="https://duckduckgo.com/">
+    <input type="hidden" name="sites" value="levlaz.org"/>
+    <input type="hidden" name="k7" value="#ffffff"/>
+    <input type="hidden" name="k8" value="#222222"/>
+    <input type="hidden" name="k9" value="#00278e"/>
+    <input type="hidden" name="kx" value="#20692b"/>
+    <input type="hidden" name="kj" value="#fafafa"/>
+    <input type="hidden" name="kt" value="p"/>
+    <img style="float:left;padding-right: 5px;" src="/img/ddg.ico" width="22px">
+    <input type="text" name="q" placeholder="Search this site..." aria-label="Search levlaz.org on DuckDuckGo"/>
+    <button type="submit">Search</button>
+</form>
+</div>
+    
+
+  </footer>
+</body>
+</html>
